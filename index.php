@@ -5,13 +5,19 @@
     * Login Page
     * @version 1.0 - 03/07/2015
     */
-	require 'vendor/autoload.php';
- 
-	use Parse\ParseClient;
+	//require '../vendor/autoload.php';
+
+
+    /* CONTAINS */
+    /* use Parse\ParseClient; AND ParseClient::initialize() */
+    /* KEEP SECRET */
+    require 'auth.php';
+
+	//use Parse\ParseClient;
     use Parse\ParseUser;
     use Parse\ParseException;
- 
-	ParseClient::initialize('ssIqti6an7anOenvJvIXBDPUurX70V6rXyKxONcx', 'eSpqAOlQ0sboJqjund2s85E9KQTcFOc8TbK6KR18', 'luEHGF6wxdZHbrVbUqB1Z4ZNsUWHfRFUszae5L0D');
+
+	//ParseClient::initialize('ssIqti6an7anOenvJvIXBDPUurX70V6rXyKxONcx', 'eSpqAOlQ0sboJqjund2s85E9KQTcFOc8TbK6KR18', 'luEHGF6wxdZHbrVbUqB1Z4ZNsUWHfRFUszae5L0D');
 
     ob_start();
 
