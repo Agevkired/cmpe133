@@ -2,9 +2,7 @@
 ------------------------
 How to first setup our repository. Xampp apache and parse are needed.
 ------------------------
-Open up the github application on your computer and click on the gear wheel icon on the upper right.
-
-Open Git Shell.
+Once in Git Shell (commandline)
 
 Navigate to c:/xampp/htdocs
 
@@ -23,6 +21,7 @@ Some useful git commands to use with git command line.
 These commands should be performed every time you start coding again
 ------------------------
 //to download any changes that have been made since then.
+//make sure your in your c:/xampp/htdocs/cmpe133 folder
 
 git fetch
 //Downloads all history from the repository bookmark
@@ -34,6 +33,7 @@ git pull
 
 These commands should be performed in sequence to upload any new changes.
 ------------------------
+//make sure your in your c:/xampp/htdocs/cmpe133 folder
 
 git fetch
 //Downloads all history from the repository bookmark
