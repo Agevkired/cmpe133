@@ -11,8 +11,11 @@
     /* KEEP SECRET */
     require 'auth.php';
 
+    include "search.php";
+
     use Parse\ParseUser;
 	use Parse\ParseQuery;
+    use Parse\ParseObject;
 
 
     ob_start(); 
@@ -21,11 +24,12 @@
 	$currentUser = "";
     if (isset($_SESSION["proConnectUserSession"])) {
         $currentUser = $_SESSION["proConnectUserSession"];
-        echo "Hello " . $currentUser->get("username") .", This is the members page.<br>";
+        echo "Hello " . $currentUser->get("name") .", This is the members page.<br>";
         if($currentUser->get("emailVerified") != true){
         	echo "An email has been sent to your inbox.<br>";
        		echo "Please verify your email: " . $currentUser->get("email") . ".<br>";
     	}
+        msgr($currentUser);
     }else{
     	echo "User not authenticated.";
 	    header( "refresh:3;url=index.php" );

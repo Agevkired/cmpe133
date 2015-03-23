@@ -19,23 +19,17 @@
 	
 	if(isset($_POST["proConnectRegister"])) {
         
-        $username = trim($_POST["username"]);
-        $pass1 = $_POST["password1"];
-        $pass2 = $_POST["password2"];
+        $username = trim($_POST["email"]);
+        $name = trim($_POST["name"]);
+        $pass = $_POST["password"];
         $email = trim($_POST["email"]);
 
         $newUser = new ParseUser();
 
 		$newUser->set("username", $username);
-
-		$myEx = "";
-		if($pass1 == $pass2){
-			$newUser->set("password", $pass1);
-		}else{
-			$myEx = "Passwords do not match.<br>";
-		}
-
+		$newUser->set("password", $pass);
 		$newUser->set("email", $email);
+		$newUser->set("name", $name);
 		$newUser->set("premium", false);
 
 
@@ -47,7 +41,6 @@
 		} catch (ParseException $ex) {
             echo "Registration error.<br>";
             //echo $ex->getCode();
-            echo $myEx;
             echo $ex->getMessage().".<br>";
 
 		}
@@ -62,17 +55,14 @@
 <body>
 <br>
 <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST">
-Username:<br>
-<input type="text" name="username" value="" autofocus>
-<br><br>
-Password:<br>
-<input type="password" name="password1" value="">
-<br><br>
-Confirm Password:<br>
-<input type="password" name="password2" value="">
+Full Name:<br>
+<input type="text" name="name" value="" autofocus>
 <br><br>
 Email:<br>
 <input type="text" name="email" value="">
+<br><br>
+Password:<br>
+<input type="password" name="password" value="">
 <br><br>
 <input type="submit" name="proConnectRegister" value="Register">
 </form>

@@ -1,0 +1,44 @@
+<!-- ==== Extracted from Goole Maps API with few changes==== -->
+<!DOCTYPE html >
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+    
+    function load() {
+      var map = new google.maps.Map(document.getElementById("map"), {
+        center: new google.maps.LatLng(37.3353, -121.8813),
+        zoom: 14,
+        mapTypeId: 'roadmap'
+      });
+      var contentstring = '<div style="width:5px;height:5px;background-color:yellow"></div>';
+      var point =  new google.maps.LatLng(37.3353, -121.8813);
+      var marker = new google.maps.Marker({
+          	position: point,
+            map: map, 
+            draggable:true,
+            descrip: contentstring,
+            title: 'SJSU',
+            link: 'https://www.google.com/maps/dir//San+José+State+University,+1+Washington+Sq,+San+Jose,+CA+95192/@37.335187,-121.881072,17z/data=!4m13!1m4!3m3!1s0x808fccb864de43d5:0x397ffe721937340e!2sSan+José+State+University!3b1!4m7!1m0!1m5!1m1!1s0x808fccb864de43d5:0x397ffe721937340e!2m2!1d-121.881072!2d37.335187',
+          });
+    	
+        	
+        google.maps.event.addListener(marker, 'mouseover', function() {
+   			 tooltip.show(this.descrip);
+		});
+       
+        
+        google.maps.event.addListener(marker, 'click', function() {
+       		 window.open(this.link);
+         });
+      }
+  </script>
+
+  </head>
+
+  <body onload="load()">
+    <div id="map" style="width: 500px; height: 300px"></div>
+  </body>
+</html>

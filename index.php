@@ -18,13 +18,21 @@
     use Parse\ParseException;
 
 	//ParseClient::initialize('ssIqti6an7anOenvJvIXBDPUurX70V6rXyKxONcx', 'eSpqAOlQ0sboJqjund2s85E9KQTcFOc8TbK6KR18', 'luEHGF6wxdZHbrVbUqB1Z4ZNsUWHfRFUszae5L0D');
-
     ob_start();
 
     if (!session_id()) session_start();
     define('DAYS_30', 2592000);
 
     if (isset($_SESSION["proConnectUserSession"])) {
+        header("Location: members.php");
+    }
+
+    if (isset($_COOKIE["proConnectUserSession"])) {
+        
+        $currentUser = $_COOKIE["proConnectUserSession"];
+        $currentUser->fetch();
+        $_COOKIE["proConnectUserSession"] = $currentUser;
+        $_SESSION['proConnectUserSession'] =  $currentUser;
         header("Location: members.php");
     }
 
@@ -36,7 +44,6 @@
    		try {
 
             $logIn = ParseUser::logIn($user, $pass);
-
             $_SESSION['proConnectUserSession'] = $logIn;
             setcookie("proConnectUserSession", $logIn, time() + DAYS_30);
 
