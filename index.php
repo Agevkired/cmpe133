@@ -47,11 +47,12 @@
 
         try {
             $logIn = ParseUser::logIn($user, $pass);
+            //Login request was sent successfully
             $_SESSION['proConnectUserSession'] = $logIn; // save parse user object in session
             setcookie("proConnectUserSession", $logIn, time() + DAYS_30); // set cookie with parse object
             header("Location: members.php");
         } catch (ParseException $ex) {
-            $loginError = $ex->getMessage();
+            $loginError = $ex->getMessage(); //set error msg
         }
     }
     /* END OF LOGIN POST TRIGGERED*/

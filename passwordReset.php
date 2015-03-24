@@ -1,8 +1,8 @@
 <?php
     /**
     * ProConnect
-    * index.php
-    * Login Page
+    * passwordReset.php
+    * Password Reset Page
     */
 
     /* auth.php CONTAINS PARSE DATABASE AUTHENTICATION SECRET KEYS */
@@ -25,7 +25,7 @@
     /* END */
     
     $resetError = ""; // ERROR MESSAGE GLOBAL VARIABLE
-    $resetSuccess = ""; // ERROR MESSAGE GLOBAL VARIABLE
+    $resetSuccess = ""; // SUCCESS MESSAGE GLOBAL VARIABLE
 
     /* IF RESET POST TRIGGERED */
     if(isset($_POST["proConnectReset"])) {
@@ -33,12 +33,12 @@
         $email = trim($_POST["email"]);
 
         try {
-            // Password reset request was sent successfully
             ParseUser::requestPasswordReset($email);
-            $resetSuccess = "<b>An email has been sent to reset your password.</b>";
+            //Password reset request was sent successfully
+            $resetSuccess = "<b>An email has been sent to reset your password.</b>"; //set success msg
             header( "refresh:5;url=index.php" );
         } catch (ParseException $ex) {
-            $resetError = "<b>".$ex->getMessage()."</b>";
+            $resetError = "<b>".$ex->getMessage()."</b>"; //set error msg
         }
     }
     /* END OF RESET POST TRIGGERED*/

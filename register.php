@@ -51,12 +51,12 @@
 
 		/* START of parse sign up */
 		try {
-		  $newUser->signUp(); 
-		  $registerSuccess = "Thank you for registering with ProConnect!<br>Connecting Professionals!";
+		  $newUser->signUp();
+		  //Sign Up request was sent successfully
+		  $registerSuccess = "Thank you for registering with ProConnect!<br>Connecting Professionals!"; //set success msg
 		  header( "refresh:5;url=index.php" );
-          
 		} catch (ParseException $ex) {
-            $registerError = $ex->getMessage();
+            $registerError = $ex->getMessage(); //set error msg
 		}
 		/* END of parse sign up */
 	}
