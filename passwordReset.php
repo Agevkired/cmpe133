@@ -23,38 +23,25 @@
         header("Location: members.php");
     }
     /* END */
-
-    /* CHECK COOKIE VARIABLE FOR AUTHENTICATED USER*/
-    if (isset($_COOKIE["proConnectUserSession"])) {
-        
-        $currentUser = $_COOKIE["proConnectUserSession"];
-        $currentUser->fetch(); // check for update
-        $_COOKIE["proConnectUserSession"] = $currentUser; // update cookie
-        $_SESSION['proConnectUserSession'] =  $currentUser; // update session
-        header("Location: members.php");
-    }
-    /* END */
-
     
-    $loginError = ""; // ERROR MESSAGE GLOBAL VARIABLE
+    $resetError = ""; // ERROR MESSAGE GLOBAL VARIABLE
+    $resetSuccess = ""; // ERROR MESSAGE GLOBAL VARIABLE
 
-    /* IF LOGIN POST TRIGGERED */
-    if(isset($_POST["proConnectLogin"])) {
-        
-        //retrieve post variables
-        $user = trim($_POST["username"]);
-        $pass = $_POST["password"];
+    /* IF RESET POST TRIGGERED */
+    if(isset($_POST["proConnectReset"])) {
+
+        $email = trim($_POST["email"]);
 
         try {
-            $logIn = ParseUser::logIn($user, $pass);
-            $_SESSION['proConnectUserSession'] = $logIn; // save parse user object in session
-            setcookie("proConnectUserSession", $logIn, time() + DAYS_30); // set cookie with parse object
-            header("Location: members.php");
+            // Password reset request was sent successfully
+            ParseUser::requestPasswordReset($email);
+            $resetSuccess = "<b>An email has been sent to reset your password.</b>";
+            header( "refresh:5;url=index.php" );
         } catch (ParseException $ex) {
-            $loginError = $ex->getMessage();
+            $resetError = "<b>".$ex->getMessage()."</b>";
         }
     }
-    /* END OF LOGIN POST TRIGGERED*/
+    /* END OF RESET POST TRIGGERED*/
 ?>
 <!-- //////////////////// END OF PHP CODE //////////////////// -->
 
@@ -88,20 +75,11 @@
     <img class="login-logo" src="img/FNI-business-handshake8.jpg" >
   <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" name="username" placeholder="Enter email">
+    <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email">
+    <?php echo $resetError//PRINTS PARSE AUTH ERROR?>
+    <?php echo $resetSuccess//PRINTS PARSE AUTH ERROR?>
   </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
-     <a href="passwordReset.php">Forgot the Password?</a>
-     <?php echo "<br><b>".$loginError."</b>"//PRINTS PARSE AUTH ERROR?>
-  </div>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox"> Remember Me
-    </label>
-  </div>
-  <button type="submit" name="proConnectLogin" class="btn btn-default">Sign In</button><br><br>
+  <button type="submit" name="proConnectReset" class="btn btn-default">Sign In</button><br><br>
   Not a member?<a href="register.php">Join Now</a>
 </div>
 
