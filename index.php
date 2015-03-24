@@ -109,6 +109,7 @@
 
   <div class="push"></div>
  </div>
+</div>
 </form>
  <!-- END OF CONTENT-->
 
@@ -119,7 +120,11 @@
 <!-- Adding the Background Image-->
 <style>
 body{
-     background: url(img/social-media.jpg);  
+    background: url(img/social-media.jpg);
+    background-color: #222222;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center; 
     }
 </style>
 

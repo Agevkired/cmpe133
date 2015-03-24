@@ -121,7 +121,7 @@
 				<div class="form-group col-lg-12">
 					<input type="password" name="password" class="form-control" id="" value="" placeholder="Password(6 or more characters)">
 				</div>
-				<?php echo "<b>".$registerError."<br><br></b>"//PRINTS PARSE AUTH ERROR?>
+				<?php echo "<b>".$registerError."<br><br></b>"//PRINTS PARSE REGISTRATION ERROR?>
 				<div class="form-group col-lg-12">
 					<p>By clicking Join Now, you agree to ProConnect's <b>User Agreement</b>, <b>Privacy Policy</b> and <b>Cookie Policy.</b></p>
 				</div>
