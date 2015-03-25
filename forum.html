@@ -2,14 +2,14 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Professional Networking! ProConnect</title>
+	<title>Forum! ProConnect</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="screen.css" rel="stylesheet">
 
 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 	<script> 
 	$(function(){
-	  $("#header").load("header.html"); 
+	  $("#header").load("profile_header.html"); 
 	  $("#footer").load("footer.html"); 
 	});
 	</script> 
@@ -28,6 +28,13 @@
 
 	<p class="h4"> Welcome To ProConnect Forum<br> <small>24 March 2015</small></p>
 	<p class="text-justify">Forums allows you to add a discussion board.</p>
+
+	<div class="btn-group btn-group-justified" role="group" aria-label="...">
+	<div class="btn-group" role="group">
+		<button type="button" class="btn btn-default" style="width: 100px; " >View Forum</button>
+		<button onclick="parent.location='create_forum.html'" class="btn btn-default" style="width: 110px; " >Create Forum</button>
+	</div>
+	</div>
 </div>
 
   <div class="push"></div>
