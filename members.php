@@ -11,7 +11,8 @@
     /* KEEP SECRET */
     require 'auth.php';
 
-    include "search.php";
+
+    include "connection.php"; // Development Testing, Connections
 
     use Parse\ParseUser;
 	use Parse\ParseQuery;
@@ -29,7 +30,8 @@
         	echo "An email has been sent to your inbox.<br>";
        		echo "Please verify your email: " . $currentUser->get("email") . ".<br>";
     	}
-        //msgr($currentUser);
+        //createProfile($currentUser);
+        //createConnectionRequest($currentUser);
     }else{
     	echo "User not authenticated.";
 	    header( "refresh:3;url=index.php" );
