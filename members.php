@@ -30,8 +30,11 @@
         	echo "An email has been sent to your inbox.<br>";
        		echo "Please verify your email: " . $currentUser->get("email") . ".<br>";
     	}
+
+        /* development testing */
         //createProfile($currentUser);
         //createConnectionRequest($currentUser);
+        //seeConnectionRequest($currentUser);
     }else{
     	echo "User not authenticated.";
 	    header( "refresh:3;url=index.php" );

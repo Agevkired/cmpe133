@@ -1,5 +1,6 @@
 <?php
 use Parse\ParseObject;
+use Parse\ParseQuery;
 use Parse\ParseUser;
 use Parse\ParseException;
 
@@ -32,21 +33,82 @@ function createProfile($currentUser){
 
 
 function createConnectionRequest($currentUser){
+
+    /* START OF FIND CONNECTION */
     $query = ParseUser::query();
-    $query->equalTo("name", "Dan"); 
-    $results = $query->find();
-    print_r($results);
-    /*
+    $query->equalTo("email", "emendoza1986@gmail.com"); 
+    $results = $query->first(); // only get first result
+    echo "Successfully retrieved " . count($results) . " results.<br>";// debugging
+    echo $results->get("name")."<br>"; // debugging
+
+
+    /* END OF FINDING CONNECTION */
+
+
+    /* START OF CONNECTION REQUEST */
+    
     try {
         $connectionRequest = new ParseObject("connectionRequest");
+        $connectionRequest->set("user1", $currentUser);
+        $connectionRequest->set("user2", $results);
+        $connectionRequest->set("user1Accepts",true);
+        // user2Accepts is left undefined until user2 accepts or denys
+        $connectionRequest->save(true);
+        echo "successfully created connectionRequest<br>";
 
     } catch (ParseException $ex) {
         echo $ex->getMessage().".<br>";
-    }*/
+    }
+    
+    /* END OF CONNECTION REQUEST */
 
 }
 
+function seeConnectionRequest($currentUser){
+    echo "<br>START of seeConnectionRequest<br><br>"; //debugging
 
+    /* START OF SEE CONNECTION USER REQUESTED */
+    $queryIreq = new ParseQuery("connectionRequest");
+    $currentUser->fetch();
+    $queryIreq->equalTo("user1", $currentUser );
+    $results = $queryIreq->find();
+    echo "People I requested: " .count($results). "<br>";
+    foreach($results as $object){
+        $object = $object->get("user2");
+        $object->fetch();
+        echo $object->get("name").", ";
+        $object = $object->get("Profile");
+        $object->fetch();
+        echo $object->get("currentPosition").", ";
+        echo $object->get("city").", ";
+        echo $object->get("state")."<br>";
+    }
+    /* END OF SEE CONNECTION USER REQUESTED */
+
+
+    /* START OF SEE CONNECTION USER REQUESTED */
+        
+    $queryReqMe = new ParseQuery("connectionRequest");
+    $currentUser->fetch();
+    $queryReqMe->equalTo("user2", $currentUser );
+    $results = $queryReqMe->find();
+    echo "People who requested me: " .count($results). "<br>";
+    foreach($results as $object){
+        $object = $object->get("user1");
+        $object->fetch();
+        echo $object->get("name")."<br>";
+        $object = $object->get("Profile");
+        $object->fetch();
+        echo $object->get("currentPosition").", ";
+        echo $object->get("city").", ";
+        echo $object->get("state")."<br>";
+    }
+
+    /* END OF SEE CONNECTION USER REQUESTED */
+    echo "<br>END of seeConnectionRequest<br>"; //debugging
+
+
+}
 
     /*
     // Create the comment
