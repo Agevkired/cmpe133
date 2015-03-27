@@ -33,8 +33,9 @@
 
         /* development testing */
         //createProfile($currentUser);
-        //createConnectionRequest($currentUser);
-        //seeConnectionRequest($currentUser);
+        //createConnectionRequest($currentUser, "emendoza1986@gmail.com");
+        seeConnectionRequest($currentUser);
+        displayConnections($currentUser);
     }else{
     	echo "User not authenticated.";
 	    header( "refresh:3;url=index.php" );

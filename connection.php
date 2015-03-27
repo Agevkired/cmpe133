@@ -32,32 +32,46 @@ function createProfile($currentUser){
 }
 
 
-function createConnectionRequest($currentUser){
+function createConnectionRequest( $currentUser, $friendsEmail ){
 
     /* START OF FIND CONNECTION */
     $query = ParseUser::query();
-    $query->equalTo("email", "emendoza1986@gmail.com"); 
-    $results = $query->first(); // only get first result
-    echo "Successfully retrieved " . count($results) . " results.<br>";// debugging
-    echo $results->get("name")."<br>"; // debugging
+    $query->equalTo("email", $friendsEmail); 
+    $friend = $query->first(); // only get first result
+    echo "Successfully retrieved " . count($friend) . " results.<br>";// debugging
+    echo $friend->get("name")."<br>"; // debugging
 
+    $checkConnectionRequest = new ParseQuery("connectionRequest");
+    $currentUser->fetch();
+    $checkConnectionRequest = $checkConnectionRequest->equalTo("user1", $currentUser )->equalTo("user2", $friend );
 
     /* END OF FINDING CONNECTION */
 
 
     /* START OF CONNECTION REQUEST */
-    
-    try {
-        $connectionRequest = new ParseObject("connectionRequest");
-        $connectionRequest->set("user1", $currentUser);
-        $connectionRequest->set("user2", $results);
-        $connectionRequest->set("user1Accepts",true);
-        // user2Accepts is left undefined until user2 accepts or denys
-        $connectionRequest->save(true);
-        echo "successfully created connectionRequest<br>";
 
-    } catch (ParseException $ex) {
-        echo $ex->getMessage().".<br>";
+    if( !$checkConnectionRequest->find(true) ){
+        try {
+
+            /* check that they are not connected already
+            $currentUserProfile = $currentUser->get("Profile");
+            $currentUserProfile->fetch();
+            $currentUserConnections =  $currentUserProfile->get("connections");
+            */
+
+            $connectionRequest = new ParseObject("connectionRequest");
+            $connectionRequest->set("user1", $currentUser);
+            $connectionRequest->set("user2", $friend);
+            $connectionRequest->set("user1Accepts",true);
+            // user2Accepts is left undefined until user2 accepts or denys
+            $connectionRequest->save(true);
+            echo "successfully created connectionRequest<br>";
+
+        } catch (ParseException $ex) {
+            echo $ex->getMessage().".<br>";
+        }
+    }else{
+        echo "You already have a pending connection request with ". $friend->get("name")."<br>";
     }
     
     /* END OF CONNECTION REQUEST */
@@ -73,15 +87,17 @@ function seeConnectionRequest($currentUser){
     $queryIreq->equalTo("user1", $currentUser );
     $results = $queryIreq->find();
     echo "People I requested: " .count($results). "<br>";
-    foreach($results as $object){
-        $object = $object->get("user2");
-        $object->fetch();
-        echo $object->get("name").", ";
-        $object = $object->get("Profile");
-        $object->fetch();
-        echo $object->get("currentPosition").", ";
-        echo $object->get("city").", ";
-        echo $object->get("state")."<br>";
+    foreach($results as $connectionRequest){
+        $friend = $connectionRequest->get("user2");
+        $friend->fetch();
+        echo $friend->get("name").", ";
+        $friendProfile = $friend->get("Profile");
+        $friendProfile->fetch();
+        echo $friendProfile->get("currentPosition").", ";
+        echo $friendProfile->get("city").", ";
+        echo $friendProfile->get("state")."<br>";
+
+        
     }
     /* END OF SEE CONNECTION USER REQUESTED */
 
@@ -93,15 +109,16 @@ function seeConnectionRequest($currentUser){
     $queryReqMe->equalTo("user2", $currentUser );
     $results = $queryReqMe->find();
     echo "People who requested me: " .count($results). "<br>";
-    foreach($results as $object){
-        $object = $object->get("user1");
-        $object->fetch();
-        echo $object->get("name")."<br>";
-        $object = $object->get("Profile");
-        $object->fetch();
-        echo $object->get("currentPosition").", ";
-        echo $object->get("city").", ";
-        echo $object->get("state")."<br>";
+    foreach($results as $connectionRequest){
+        $friend = $connectionRequest->get("user1");
+        $friend->fetch();
+        echo $friend->get("name").", ";
+        $friendProfile = $friend->get("Profile");
+        $friendProfile->fetch();
+        echo $friendProfile->get("currentPosition").", ";
+        echo $friendProfile->get("city").", ";
+        echo $friendProfile->get("state")."<br>";
+        acceptConnectionRequest( $connectionRequest );// testing
     }
 
     /* END OF SEE CONNECTION USER REQUESTED */
@@ -110,55 +127,62 @@ function seeConnectionRequest($currentUser){
 
 }
 
-    /*
-    // Create the comment
-    $myComment = new ParseObject("Comment");
-    
-    $myComment->set("content", "Let's do Sushirrito.");
-     
-    // Add the post as a value in the comment
-    $myPost->set("child", $myComment);
-    $myPost->save();
-    $myComment->set("parent", $myPost);
-     
-    // This will save both myPost and myComment
-    $myComment->save();
+function acceptConnectionRequest($connectionRequestObject){
 
-
+    echo "<br>START of acceptConnectionRequest<br><br>"; //debugging
     try {
-        $currentUser->set("profile", $profile );
-        $currentUser->save(true);
-      // The current user is now set to user.
-    } catch (ParseException $ex) {
-      // The token could not be validated.
-        echo $ex->getMessage().".<br>";
-    }
+        $user1 = $connectionRequestObject->get("user1");
+        $user1->fetch();
+        $user1profile = $user1->get("Profile");
+        $user1profile->fetch();
 
+        $user2 = $connectionRequestObject->get("user2");
+        $user2->fetch();
+        $user2profile = $user2->get("Profile");
+        $user2profile->fetch();
 
-    try {
+        $user1profile->addUnique("connections", [$user2]);
+        $user1profile->save(true);
+
+        $user2profile->addUnique("connections", [$user1]);
+        $user2profile->save(true);
+
+        echo $user1->get("name") . " is now friends with " . $user2->get("name"). "<br>";
+
+        $connectionRequestObject->destroy(true);
 
     } catch (ParseException $ex) {
         echo $ex->getMessage().".<br>";
     }
+    echo "<br>END of acceptConnectionRequest<br><br>"; //debugging
+}
 
-    echo "Authenticated: ".$currentUser->isAuthenticated()."<br>";//debugging
-    try {
-        $currentUser->fetch();
-        $post = $currentUser->get("msgTest");
-        $post->fetch();
-        //var_dump($post);
-        echo $post->get("title")."<br>";
-        echo $post->get("content")."<br>";
-        $post = $post->get("child");
-        $post->fetch();
-        echo $post->get("content")."<br>";
-        
-        //The object was retrieved successfully.
+function displayConnections($currentUser){
+
+    try{
+        $currentUserProfile = $currentUser->get("Profile");
+        $currentUserProfile->fetch();
+
+        $currentUserConnections =  $currentUserProfile->get("connections");
+        echo "<br>START of CONNECTIONS<br><br>";
+        echo "Connections: " .count($currentUserConnections). "<br>";
+        if($currentUserConnections){
+            foreach($currentUserConnections as $friend){
+                $friend->fetch();
+                echo $friend->get("name").", ";
+                $friendProfile = $friend->get("Profile");
+                $friendProfile->fetch();
+                echo $friendProfile->get("currentPosition").", ";
+                echo $friendProfile->get("city").", ";
+                echo $friendProfile->get("state")."<br>";
+            }
+        }
+        echo "<br>END of CONNECTIONS<br><br>";
+
     } catch (ParseException $ex) {
-        // The object was not retrieved successfully.
-        // error is a ParseException with an error code and message.
         echo $ex->getMessage().".<br>";
-    }*/
+    }
+}
 
 
 ?>
