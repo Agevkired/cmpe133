@@ -12,7 +12,7 @@
     require 'auth.php';
 
 
-    include "connection.php"; // Development Testing, Connections
+    include "connectionFunctions.php"; // Development Testing, Connections
 
     use Parse\ParseUser;
 	use Parse\ParseQuery;

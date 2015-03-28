@@ -20,7 +20,7 @@
 
     /* CHECK PHP SESSION VARIABLE FOR AUTHENTICATED USER*/
     if (isset($_SESSION["proConnectUserSession"])) {
-        header("Location: members.php");
+        header("Location: profile.php");
     }
     /* END */
 
@@ -31,7 +31,7 @@
         $currentUser->fetch(); // check for update
         $_COOKIE["proConnectUserSession"] = $currentUser; // update cookie
         $_SESSION['proConnectUserSession'] =  $currentUser; // update session
-        header("Location: members.php");
+        header("Location: profile.php");
     }
     /* END */
 
@@ -50,7 +50,7 @@
             //Login request was sent successfully
             $_SESSION['proConnectUserSession'] = $logIn; // save parse user object in session
             setcookie("proConnectUserSession", $logIn, time() + DAYS_30); // set cookie with parse object
-            header("Location: members.php");
+            header("Location: profile.php");
         } catch (ParseException $ex) {
             $loginError = $ex->getMessage(); //set error msg
         }

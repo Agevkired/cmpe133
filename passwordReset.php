@@ -20,7 +20,7 @@
 
     /* CHECK PHP SESSION VARIABLE FOR AUTHENTICATED USER*/
     if (isset($_SESSION["proConnectUserSession"])) {
-        header("Location: members.php");
+        header("Location: profile.php");
     }
     /* END */
     
