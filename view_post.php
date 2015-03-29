@@ -1,3 +1,38 @@
+<?php
+    /**
+    * ProConnect
+    * members.php
+    * Members only page
+    * @version 1.0 - 03/07/2015
+    */
+
+    /* CONTAINS */
+    /* use Parse\ParseClient; AND ParseClient::initialize() */
+    /* KEEP SECRET */
+    require 'auth.php';
+
+
+    include "forumFunctions.php";
+
+    use Parse\ParseUser;
+    use Parse\ParseQuery;
+    use Parse\ParseObject;
+
+
+    ob_start(); 
+    if (!session_id()) session_start();
+    
+    $currentUser = "";
+    if (isset($_SESSION["proConnectUserSession"])) {
+        $currentUser = $_SESSION["proConnectUserSession"];
+        
+    }else{
+        echo "User not authenticated.";
+        header( "refresh:3;url=index.php" );
+        exit;
+    }
+    
+?>
 <html>
 <head>
 	<meta charset="utf-8">

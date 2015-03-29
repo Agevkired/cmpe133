@@ -1,39 +1,3 @@
-<?php
-    /**
-    * ProConnect
-    * members.php
-    * Members only page
-    * @version 1.0 - 03/07/2015
-    */
-
-    /* CONTAINS */
-    /* use Parse\ParseClient; AND ParseClient::initialize() */
-    /* KEEP SECRET */
-    require 'auth.php';
-
-
-    include "forumFunctions.php";
-
-    use Parse\ParseUser;
-    use Parse\ParseQuery;
-    use Parse\ParseObject;
-
-
-    ob_start(); 
-    if (!session_id()) session_start();
-    
-    $currentUser = "";
-    if (isset($_SESSION["proConnectUserSession"])) {
-        $currentUser = $_SESSION["proConnectUserSession"];
-        
-    }else{
-        echo "User not authenticated.";
-        header( "refresh:3;url=index.php" );
-        exit;
-    }
-    
-?>
-
 <html>
 <head>
 	<meta charset="utf-8">
@@ -67,7 +31,7 @@
 
 	<div class="btn-group btn-group-justified" role="group" aria-label="...">
 	<div class="btn-group" role="group">
-		<button type="button" class="btn btn-default" style="width: 100px; " >View Forum</button>
+		<button onclick="parent.location='view_forum.php'"class="btn btn-default" style="width: 100px; " >View Forum</button>
 		<button  onclick="parent.location='create_forum.html'" class="btn btn-default" style="width: 110px; " >Create Forum</button>
 	</div>
 	</div>
@@ -77,28 +41,35 @@
     <div class="row">
         <form role="form">
             <div class="col-md-6 col-md-push-3">
+                <!-- PHP for viewing forum comments and other details-->
                 <?php
-                    include_once('../database/connect.php');
-                    $sql="SELECT * FROM Post ORDER BY post_title ASC";
-                    $res = mysql_query($sql) or die(mysql_error());
-                    $topics="";
-                    $count =0;
-                    if(mysql_num_rows($res) > 0)
+                include_once('../database/connect.php');
+                $cid=$_GET['cid'];
+                $sql= "SELECT * FROM Post WHERE post_id=".$cid;
+                $res = mysql_query($sql) or die(mysql_error());
+                $topics="";
+                if (mysql_num_rows($res) == 1)
+                {
+                    while($row=mysql_fetch_assoc($res))
                     {
-                        while($row= mysql_fetch_assoc($res))
-                        {
-                            $id=$row['post_id'];
-                            $title=$row['post_title'];
-                            $creator=$row['post_creator'];
-                            $date=$row['post_date'];
+                    $id=$cid;
+                    $title=$row['post_title'];
+                    $creator=$row['post_creator'];
+                    $date=$row['post_date'];
+                    $discription=$row['post_content'];
+                    $replies=$row['replies'];
                            
-                        $topics .="<p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>".$title."</b></a><br>Posted by: <font size='-1'><b>".$creator."</b> on ". $date."</font></p>";
-                            $count = $count +1;
-                        }
-                        echo 'Total Number of Forum Posts are: '.$count;
-                        echo $topics;
+                    $topics .="<p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>".$title."</b></a><br>Posted by: <font size='-1'><b>".$creator."</b> on ". $date."</font>
+                            <br>$discription</p>";     
                     }
-                    else { echo '<p>There are no Posts Available Yet!</p>';}
+                    echo $topics;        
+                }
+                else
+                {
+                    echo '<a href = "view_forum.php">Return to the forum </a><hr />';
+                    echo 'You are trying to view the post that doesnt not exist yet!';
+                }
+
                 ?>
             </div>
         </form>
