@@ -13,6 +13,7 @@
 
 
     include "connectionFunctions.php"; // Development Testing, Connections
+    include "forumFunctions.php";// Development Testing, Forum
 
     use Parse\ParseUser;
 	use Parse\ParseQuery;
@@ -133,8 +134,11 @@
                     echo "Reminder: An email has been sent to your inbox.<br>";
                     echo "Please verify your email: " . $currentUser->get("email") . ".<br>";
                 }
-                seeConnectionRequest($currentUser);
-                displayConnections($currentUser) 
+                //seeConnectionRequest($currentUser);
+                //displayConnections($currentUser);
+                //createNewForumRoot($currentUser, "Hello World!", "First post ever!", "hello,world , first, post ,ever");
+                //createForumPost("m88yAYyvqM", $currentUser, "Third post ever.");
+                //displayForumRoot("m88yAYyvqM");
             ?>
         </p><!-- END OF PHP DEVELOPMENT TESTING -->
     
