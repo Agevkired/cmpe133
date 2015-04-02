@@ -136,8 +136,10 @@
                     echo "Reminder: An email has been sent to your inbox.<br>";
                     echo "Please verify your email: " . $currentUser->get("email") . ".<br>";
                 }
-                //seeConnectionRequest($currentUser);
-                //displayConnections($currentUser);
+
+                createConnectionRequest( $currentUser, "shahbazkhan@google.com" );
+                seeConnectionRequest($currentUser);
+                displayConnections($currentUser);
                 //createNewForumRoot($currentUser, "Hello World!", "First post ever!", "hello,world , first, post ,ever");
                 //createForumPost("m88yAYyvqM", $currentUser, "Third post ever.");
                 //displayForumRoot("m88yAYyvqM");

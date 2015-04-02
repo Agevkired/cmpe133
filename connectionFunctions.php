@@ -3,6 +3,7 @@ use Parse\ParseObject;
 use Parse\ParseQuery;
 use Parse\ParseUser;
 use Parse\ParseException;
+use Parse\ParseRelation;
 
 function createProfile($currentUser){
     
@@ -84,19 +85,13 @@ function seeConnectionRequest($currentUser){
     /* START OF SEE CONNECTION USER REQUESTED */
     $queryIreq = new ParseQuery("connectionRequest");
     $currentUser->fetch();
-    $queryIreq->equalTo("user1", $currentUser );
+    $queryIreq->equalTo("toUser", $currentUser );
     $results = $queryIreq->find();
     echo "People I requested: " .count($results). "<br>";
     foreach($results as $connectionRequest){
-        $friend = $connectionRequest->get("user2");
+        $friend = $connectionRequest->get("fromUser");
         $friend->fetch();
-        echo $friend->get("name").", ";
-        $friendProfile = $friend->get("Profile");
-        $friendProfile->fetch();
-        echo $friendProfile->get("currentPosition").", ";
-        echo $friendProfile->get("city").", ";
-        echo $friendProfile->get("state")."<br>";
-
+        echo $friend->get("name").", ".$friend->get("email")."<br>";
         
     }
     /* END OF SEE CONNECTION USER REQUESTED */
@@ -106,19 +101,14 @@ function seeConnectionRequest($currentUser){
         
     $queryReqMe = new ParseQuery("connectionRequest");
     $currentUser->fetch();
-    $queryReqMe->equalTo("user2", $currentUser );
+    $queryReqMe->equalTo("fromUser", $currentUser );
     $results = $queryReqMe->find();
     echo "People who requested me: " .count($results). "<br>";
     foreach($results as $connectionRequest){
-        $friend = $connectionRequest->get("user1");
+        $friend = $connectionRequest->get("toUser");
         $friend->fetch();
-        echo $friend->get("name").", ";
-        $friendProfile = $friend->get("Profile");
-        $friendProfile->fetch();
-        echo $friendProfile->get("currentPosition").", ";
-        echo $friendProfile->get("city").", ";
-        echo $friendProfile->get("state")."<br>";
-        acceptConnectionRequest( $connectionRequest );// testing
+        echo $friend->get("name").", ".$friend->get("email");
+        //acceptConnectionRequest( $connectionRequest );// testing
     }
 
     /* END OF SEE CONNECTION USER REQUESTED */
@@ -131,21 +121,22 @@ function acceptConnectionRequest($connectionRequestObject){
 
     echo "<br>START of acceptConnectionRequest<br><br>"; //debugging
     try {
-        $user1 = $connectionRequestObject->get("user1");
+        $user1 = $connectionRequestObject->get("fromUser");
         $user1->fetch();
-        $user1profile = $user1->get("Profile");
-        $user1profile->fetch();
+        $user1connect = $user1->getRelation("connections");
 
-        $user2 = $connectionRequestObject->get("user2");
+
+        $user2 = $connectionRequestObject->get("toUser");
         $user2->fetch();
-        $user2profile = $user2->get("Profile");
-        $user2profile->fetch();
+        $user2connect = $user2->getRelation("connections");
 
-        $user1profile->addUnique("connections", [$user2]);
-        $user1profile->save(true);
 
-        $user2profile->addUnique("connections", [$user1]);
-        $user2profile->save(true);
+        $user1connect->add($user2);
+        $user1->save(true);
+
+        $user2connect->add($user1);
+
+        $user2->save(true);
 
         echo $user1->get("name") . " is now friends with " . $user2->get("name"). "<br>";
 
@@ -160,21 +151,21 @@ function acceptConnectionRequest($connectionRequestObject){
 function displayConnections($currentUser){
 
     try{
-        $currentUserProfile = $currentUser->get("Profile");
-        $currentUserProfile->fetch();
 
-        $currentUserConnections =  $currentUserProfile->get("connections");
+        $currentUserConnections =  $currentUser->getRelation("connections")->getQuery()->find();
+        //echo var_dump($currentUserConnections);
         echo "<br>START of CONNECTIONS<br><br>";
         echo "Connections: " .count($currentUserConnections). "<br>";
         if($currentUserConnections){
             foreach($currentUserConnections as $friend){
                 $friend->fetch();
-                echo $friend->get("name").", ";
-                $friendProfile = $friend->get("Profile");
-                $friendProfile->fetch();
-                echo $friendProfile->get("currentPosition").", ";
-                echo $friendProfile->get("city").", ";
-                echo $friendProfile->get("state")."<br>";
+                //echo var_dump($friend);
+                echo $friend->get("name").", ".$friend->get("email")."<br>";
+                //$friendProfile = $friend->get("Profile");
+                //$friendProfile->fetch();
+                //echo $friendProfile->get("currentPosition").", ";
+                //echo $friendProfile->get("city").", ";
+                //echo $friendProfile->get("state")."<br>";
             }
         }
         echo "<br>END of CONNECTIONS<br><br>";

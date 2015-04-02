@@ -16,6 +16,18 @@ Parse.Cloud.beforeSave(Parse.User, function(request, response) {
 
 });
 
+
+
+Parse.Cloud.beforeSave("Profile", function(request, response) {
+  if (!request.object.get("currentPosition")) {
+    response.error("Please set a current position.");
+  } else if (!request.object.get("city")) {
+    response.error("you cannot give more than five stars");
+  } else {
+    response.success();
+  }
+});
+
 Parse.Cloud.define("acceptConnectionRequest", function(request, response) {
 
 
