@@ -46,6 +46,7 @@
 		$newUser->set("email", $email);
 		$newUser->set("firstName", $firstName);
 		$newUser->set("lastName", $lastName);
+		$newUser->set("name", $name);
 		$newUser->set("premium", false);
 		/* END of create parse user object */
 
@@ -99,7 +100,7 @@
 				<h2 class="dark-grey"></h2>
 				
 				<img src="img/international.jpg" class="pull-left" width="450px">		
-			
+				
 			</div>
 		
 			<div class="col-md-6">

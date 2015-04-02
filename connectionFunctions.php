@@ -43,26 +43,26 @@ function createConnectionRequest( $currentUser, $friendsEmail ){
 
     $checkConnectionRequest = new ParseQuery("connectionRequest");
     $currentUser->fetch();
-    $checkConnectionRequest = $checkConnectionRequest->equalTo("user1", $currentUser )->equalTo("user2", $friend );
+    $checkConnectionRequest = $checkConnectionRequest->equalTo("fromUser", $currentUser )->equalTo("toUser", $friend );
 
     /* END OF FINDING CONNECTION */
 
 
     /* START OF CONNECTION REQUEST */
 
+    /* IF CONNECTION REQUEST DOESN'T ALREADY EXIST */
     if( !$checkConnectionRequest->find(true) ){
         try {
 
-            /* check that they are not connected already
+            /* IF THEY ARE NOT CONNECTED ALREADY
             $currentUserProfile = $currentUser->get("Profile");
             $currentUserProfile->fetch();
             $currentUserConnections =  $currentUserProfile->get("connections");
             */
 
             $connectionRequest = new ParseObject("connectionRequest");
-            $connectionRequest->set("user1", $currentUser);
-            $connectionRequest->set("user2", $friend);
-            $connectionRequest->set("user1Accepts",true);
+            $connectionRequest->set("fromUser", $currentUser);
+            $connectionRequest->set("toUser", $friend);
             // user2Accepts is left undefined until user2 accepts or denys
             $connectionRequest->save(true);
             echo "successfully created connectionRequest<br>";

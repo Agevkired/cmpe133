@@ -18,6 +18,8 @@
     use Parse\ParseUser;
 	use Parse\ParseQuery;
     use Parse\ParseObject;
+    use Parse\ParseCloud;
+    use Parse\ParseException;
 
 
     ob_start(); 
@@ -139,6 +141,18 @@
                 //createNewForumRoot($currentUser, "Hello World!", "First post ever!", "hello,world , first, post ,ever");
                 //createForumPost("m88yAYyvqM", $currentUser, "Third post ever.");
                 //displayForumRoot("m88yAYyvqM");
+                /*
+                createConnectionRequest( $currentUser , "emendoza1986@gmail.com" );
+                $query = new ParseQuery("connectionRequest");
+                $query->equalTo("fromUser", $currentUser );
+                $CRobj = $query->first()->getObjectId();
+                echo " Object ID: ".$CRobj."<br>";
+                try{
+                    var_dump( ParseCloud::run('acceptConnectionRequest', [ 'id' => $CRobj ] ) );
+                } catch (ParseException $ex) {
+                    echo $ex->getMessage().".<br>";
+                }
+                */
             ?>
         </p><!-- END OF PHP DEVELOPMENT TESTING -->
     
