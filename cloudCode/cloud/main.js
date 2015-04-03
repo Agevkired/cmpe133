@@ -11,13 +11,23 @@ Parse.Cloud.beforeSave(Parse.User, function(request, response) {
 	if ( !request.object.get("name") ) {
 		response.error("Please enter your full name.");
 	} else {
+
+		var str = request.object.get("name");
+
+		str = str.replace(/[^\s]+/g, function(word) {
+		  return word.replace(/^./, function(first) {
+		    return first.toUpperCase();
+		  });
+		});
+		request.object.set("name", str);
+
 		response.success();
   	}
 
 });
 
 
-
+/* force user to populate their profile object before save */
 Parse.Cloud.beforeSave("Profile", function(request, response) {
 	if (!request.object.get("currentPosition")) {
 		response.error("Please set a current position.");
@@ -38,36 +48,9 @@ Parse.Cloud.beforeSave("Profile", function(request, response) {
 	}
 });
 
-Parse.Cloud.beforeSave("connectionRequest", function(request, response) {
-
-	var fromUser = request.object.get("fromUser");
-	console.log(fromUser.get("objectId"));
-
-	var toUser = request.object.get("toUser");
-
-	/*
-	if (!request.object.get("currentPosition")) {
-		response.error("Please set a current position.");
-	} else if (!request.object.get("city")) {
-		response.error("Please set a city.");
-	} else if (!request.object.get("state")) {
-		response.error("Please set a state.");
-	} else if (!request.object.get("summary")) {
-		response.error("Please provide a profile summary.");
-	} else if (!request.object.get("education")) {
-		response.error("Please provide an education background.");
-	} else if (!request.object.get("experience")) {
-		response.error("Please provide any job experience.");
-	//} else if (!request.object.get("certifications")) {
-	//	response.error(""); //some people may not have any certifications.
-	} else {
-		response.success();
-	}*/
-});
 
 
-
-
+/* me trying to work with gay ass cloud code */
 Parse.Cloud.define("acceptConnectionRequest", function(request, response) {
 
 

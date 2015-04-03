@@ -135,10 +135,10 @@
                 echo "<hr>";
 
                 //createConnectionRequest( $currentUser, "shahbazkhan@google.com" );
-                //createConnectionRequest( $currentUser, "emendoza1986@gmail.com" );
+                //createConnectionRequest( $currentUser, "emmendoza1986@gmail.com" );
                 //destroyConnection($currentUser,"emmendoza1986@gmail.com");
-                //seeConnectionRequest($currentUser);
-                //displayConnections($currentUser);
+                seeConnectionRequest($currentUser);
+                displayConnections($currentUser);
                 //createNewForumRoot($currentUser, "Hello World!", "First post ever!", "hello,world , first, post ,ever");
                 //createForumPost("m88yAYyvqM", $currentUser, "Third post ever.");
                 //displayForumRoot("m88yAYyvqM");

@@ -37,15 +37,16 @@
         $lastName = trim($_POST["lastName"]);
         $pass = $_POST["password"];
         $email = trim($_POST["email"]);
-
+        $name = "";
+        if($firstName && $lastName){
+        	$name = $firstName." ".$lastName;
+        }
         /* START of create parse user object */
         $newUser = new ParseUser();
 
 		$newUser->set("username", $username);
 		$newUser->set("password", $pass);
 		$newUser->set("email", $email);
-		$newUser->set("firstName", $firstName);
-		$newUser->set("lastName", $lastName);
 		$newUser->set("name", $name);
 		$newUser->set("premium", false);
 		/* END of create parse user object */
