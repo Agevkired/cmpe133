@@ -85,11 +85,11 @@ function seeConnectionRequest($currentUser){
     /* START OF SEE CONNECTION USER REQUESTED */
     $queryIreq = new ParseQuery("connectionRequest");
     $currentUser->fetch();
-    $queryIreq->equalTo("toUser", $currentUser );
+    $queryIreq->equalTo("fromUser", $currentUser );
     $results = $queryIreq->find();
     echo "People I requested: " .count($results). "<br>";
     foreach($results as $connectionRequest){
-        $friend = $connectionRequest->get("fromUser");
+        $friend = $connectionRequest->get("toUser");
         $friend->fetch();
         echo $friend->get("name").", ".$friend->get("email")."<br>";
         
@@ -101,14 +101,14 @@ function seeConnectionRequest($currentUser){
         
     $queryReqMe = new ParseQuery("connectionRequest");
     $currentUser->fetch();
-    $queryReqMe->equalTo("fromUser", $currentUser );
+    $queryReqMe->equalTo("toUser", $currentUser );
     $results = $queryReqMe->find();
     echo "People who requested me: " .count($results). "<br>";
     foreach($results as $connectionRequest){
-        $friend = $connectionRequest->get("toUser");
+        $friend = $connectionRequest->get("fromUser");
         $friend->fetch();
         echo $friend->get("name").", ".$friend->get("email");
-        //acceptConnectionRequest( $connectionRequest );// testing
+        acceptConnectionRequest( $connectionRequest );// testing
     }
 
     /* END OF SEE CONNECTION USER REQUESTED */
@@ -169,6 +169,30 @@ function displayConnections($currentUser){
             }
         }
         echo "<br>END of CONNECTIONS<br><br>";
+
+    } catch (ParseException $ex) {
+        echo $ex->getMessage().".<br>";
+    }
+}
+
+
+
+function destroyConnection($currentUser, $unfriendId){
+    try{
+    $query = ParseUser::query();
+    $unfriend = $query->equalTo("objectId", $unfriendId)->first();
+
+    //$unfriend = $query->first(); // only get first result
+    //echo "Successfully retrieved " . count($unfriend) . " results.<br>";// debugging
+    //echo $unfriend->get("name")."<br>"; // debugging
+    
+    $currentUser->getRelation("connections")->remove($unfriend);
+    $currentUser->save(true);
+
+    $unfriend->getRelation("connections")->remove($currentUser);
+    $unfriend->save(true);
+
+    echo "You are no longer connected to ".$unfriend->get("name");
 
     } catch (ParseException $ex) {
         echo $ex->getMessage().".<br>";

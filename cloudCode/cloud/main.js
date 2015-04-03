@@ -19,14 +19,54 @@ Parse.Cloud.beforeSave(Parse.User, function(request, response) {
 
 
 Parse.Cloud.beforeSave("Profile", function(request, response) {
-  if (!request.object.get("currentPosition")) {
-    response.error("Please set a current position.");
-  } else if (!request.object.get("city")) {
-    response.error("you cannot give more than five stars");
-  } else {
-    response.success();
-  }
+	if (!request.object.get("currentPosition")) {
+		response.error("Please set a current position.");
+	} else if (!request.object.get("city")) {
+		response.error("Please set a city.");
+	} else if (!request.object.get("state")) {
+		response.error("Please set a state.");
+	} else if (!request.object.get("summary")) {
+		response.error("Please provide a profile summary.");
+	} else if (!request.object.get("education")) {
+		response.error("Please provide an education background.");
+	} else if (!request.object.get("experience")) {
+		response.error("Please provide any job experience.");
+	//} else if (!request.object.get("certifications")) {
+	//	response.error(""); //some people may not have any certifications.
+	} else {
+		response.success();
+	}
 });
+
+Parse.Cloud.beforeSave("connectionRequest", function(request, response) {
+
+	var fromUser = request.object.get("fromUser");
+	console.log(fromUser.get("objectId"));
+
+	var toUser = request.object.get("toUser");
+
+	/*
+	if (!request.object.get("currentPosition")) {
+		response.error("Please set a current position.");
+	} else if (!request.object.get("city")) {
+		response.error("Please set a city.");
+	} else if (!request.object.get("state")) {
+		response.error("Please set a state.");
+	} else if (!request.object.get("summary")) {
+		response.error("Please provide a profile summary.");
+	} else if (!request.object.get("education")) {
+		response.error("Please provide an education background.");
+	} else if (!request.object.get("experience")) {
+		response.error("Please provide any job experience.");
+	//} else if (!request.object.get("certifications")) {
+	//	response.error(""); //some people may not have any certifications.
+	} else {
+		response.success();
+	}*/
+});
+
+
+
 
 Parse.Cloud.define("acceptConnectionRequest", function(request, response) {
 

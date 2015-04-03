@@ -131,15 +131,14 @@
         <h3>ProConnect</br><small>Software Engineer</small></h3>
         <p> <!-- START OF PHP DEVELOPMENT TESTING -->
             <?php 
-                echo "Hello " . $currentUser->get("name") .", This page is still under development.<br>";
-                if($currentUser->get("emailVerified") != true){
-                    echo "Reminder: An email has been sent to your inbox.<br>";
-                    echo "Please verify your email: " . $currentUser->get("email") . ".<br>";
-                }
+                echo $currentUser->get("name") . ", ". $currentUser->get("email")."<br>";
+                echo "<hr>";
 
-                createConnectionRequest( $currentUser, "shahbazkhan@google.com" );
-                seeConnectionRequest($currentUser);
-                displayConnections($currentUser);
+                //createConnectionRequest( $currentUser, "shahbazkhan@google.com" );
+                //createConnectionRequest( $currentUser, "emendoza1986@gmail.com" );
+                //destroyConnection($currentUser,"emmendoza1986@gmail.com");
+                //seeConnectionRequest($currentUser);
+                //displayConnections($currentUser);
                 //createNewForumRoot($currentUser, "Hello World!", "First post ever!", "hello,world , first, post ,ever");
                 //createForumPost("m88yAYyvqM", $currentUser, "Third post ever.");
                 //displayForumRoot("m88yAYyvqM");
