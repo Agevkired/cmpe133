@@ -36,21 +36,22 @@
 
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title> Forum! ProConnect</title>
-	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link href="screen.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Forum! ProConnect</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="screen.css" rel="stylesheet">
 
-	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-	<script> 
-	$(function(){
-	  $("#header").load("profile_header.html"); 
-	  $("#footer").load("footer.html"); 
-	});
-	</script> 
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script> 
+    $(function(){
+      $("#header").load("profile_header.html"); 
+      $("#footer").load("footer.html"); 
+    });
+    </script> 
 </head>
-<body>
+  <body onload="myFunction()">
+
 
 <!-- START OF HEADER-->
 <div id="header"></div>
@@ -59,49 +60,34 @@
 <!-- Content of the page-->
 <div class="wrapper">
 <div class="col-md-9 col-md-push-4">
-	
-			<img src="http://packetpushers.net/wp-content/uploads/2012/10/forumlogo.jpg" height="300px" align="center">
+    
+            <img src="http://packetpushers.net/wp-content/uploads/2012/10/forumlogo.jpg" height="300px" align="center">
 
-	<p class="h4"> Welcome To ProConnect Forum<br> <small>24 March 2015</small></p>
-	<p class="text-justify">Forums allows you to add a discussion board.</p>
+    <p class="h4"> Welcome To ProConnect Forums<br> <small>Connecting Professionals</small></p>
+    <!-- <p class="text-justify">Forums allows you to add a discussion board.</p> -->
 
-	<div class="btn-group btn-group-justified" role="group" aria-label="...">
-	<div class="btn-group" role="group">
-		<button type="button" class="btn btn-default" style="width: 100px; " >View Forum</button>
-		<button  onclick="parent.location='create_forum.html'" class="btn btn-default" style="width: 110px; " >Create Forum</button>
-	</div>
-	</div>
-	<br><br>
+    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default" style="width: 100px; " >View Forum</button>
+        <button  onclick="parent.location='create_forum.php'" class="btn btn-default" style="width: 110px; " >Create Forum</button>
+    </div>
+    </div>
+    <br><br>
 </div>
 <div class="container">
     <div class="row">
-        <form role="form">
             <div class="col-md-6 col-md-push-3">
-                <?php
-                    include_once('../database/connect.php');
-                    $sql="SELECT * FROM Post ORDER BY post_title ASC";
-                    $res = mysql_query($sql) or die(mysql_error());
-                    $topics="";
-                    $count =0;
-                    if(mysql_num_rows($res) > 0)
-                    {
-                        while($row= mysql_fetch_assoc($res))
-                        {
-                            $id=$row['post_id'];
-                            $title=$row['post_title'];
-                            $creator=$row['post_creator'];
-                            $date=$row['post_date'];
-                           
-                        $topics .="<p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>".$title."</b></a><br>Posted by: <font size='-1'><b>".$creator."</b> on ". $date."</font></p>";
-                            $count = $count +1;
-                        }
-                        echo 'Total Number of Forum Posts are: '.$count;
-                        echo $topics;
-                    }
-                    else { echo '<p>There are no Posts Available Yet!</p>';}
-                ?>
+                <form role="form" method="post">
+                    <input type="text" class="form-control" id="keyword" placeholder="Search by title, search tags, user name and email">
+                </form>
+                <br>
+                <!--
+                <p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>Title</b></a><br>Posted by: <font size='-1'><b>Emmanuel</b> on DATE</font></p>
+                -->
+                <div id="content"></div>
+                
             </div>
-        </form>
+        
 
     </div>
 </div>
@@ -128,5 +114,70 @@
 
 <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    function myFunction() {
+        $.post('forumFunctions.php', { allForums: true }, function(data) {
+                    $('#content').empty()
+                    $.each(data, function() {
+                        $('#content').append('<p class=\'topic_blocks\'><b>Title: <a href="addUser.php?id=' 
+                            + this.id + '">' 
+                            + this.title 
+                            + '</a></b><br>By: ' 
+                            + this.createdBy
+                            + '<br>Created: '
+                            + this.createdAt
+                            + '<br>Last Updated: '
+                            + this.updatedAt
+                            + '</li>');
+                    });
+                }, "json");
+    }
+    </script>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#keyword').on('input', function() {
+            var searchKeyword = $(this).val();
+            if (searchKeyword.length >= 3) {
+                $.post('forumFunctions.php', { keywords: searchKeyword }, function(data) {
+                    $('#content').empty()
+                    $.each(data, function() {
+                        $('#content').append('<p class=\'topic_blocks\'><b>Title: <a href="addUser.php?id=' 
+                            + this.id + '">' 
+                            + this.title 
+                            + '</a></b><br>By: ' 
+                            + this.createdBy
+                            + '<br>Created: '
+                            + this.createdAt
+                            + '<br>Last Updated: '
+                            + this.updatedAt
+                            + '</li>');
+                    });
+                }, "json");
+            }else if(searchKeyword.length == 0){//added
+                    $.post('forumFunctions.php', { allForums: true }, function(data) {
+                    $('#content').empty()
+                    $.each(data, function() {
+                        $('#content').append('<p class=\'topic_blocks\'><b>Title: <a href="addUser.php?id=' 
+                            + this.id + '">' 
+                            + this.title 
+                            + '</a></b><br>By: ' 
+                            + this.createdBy
+                            + '<br>Created: '
+                            + this.createdAt
+                            + '<br>Last Updated: '
+                            + this.updatedAt
+                            + '</li>');
+                    });
+                }, "json");
+            }//added
+            
+        });
+    });
+    </script>
+
 </body>
 </html>

@@ -1,4 +1,5 @@
 <?php
+require 'auth.php';
 
 use Parse\ParseObject;
 use Parse\ParseQuery;
@@ -7,9 +8,7 @@ use Parse\ParseException;
 
 
 function createNewForumRoot($currentUser, $title, $content, $searchTagString){
-$searchTagString = strtolower($searchTagString);
-$searchTagArray = explode(",", $searchTagString); //string to array comma delimiter
-$searchTagArray = array_map('trim',$searchTagArray); // removes excess white spaces from front and end
+$searchTagString = trim(strtolower($searchTagString));
 
 	try {
 		$forumPost = new ParseObject("forumPost");
@@ -25,8 +24,11 @@ $searchTagArray = array_map('trim',$searchTagArray); // removes excess white spa
     try {
         $forumRoot = new ParseObject("forumRoot");
         $forumRoot->set("createdBy", $currentUser); //pointer profile->user
+        $forumRoot->set("lastUpdatedBy", $currentUser);
+        $forumRoot->set("createdBy", $currentUser);
+        $forumRoot->set("postCount", 1);
         $forumRoot->set("title", $title);
-        $forumRoot->setArray("searchTags", $searchTagArray);
+        $forumRoot->set("searchTags", $searchTagString);
         $forumRoot->addUnique("forumPost", [$forumPost]);
         $forumRoot->save(true);
 
@@ -87,12 +89,91 @@ function displayForumRoot($forumRootObjectId){
 	}
 }
 
-function forumSearch($searchString){
-	$searchString = strtolower($searchString);
-	$searchString = trim($searchString);
-	$searchTagArray = explode(" ", $searchString); //string to array whitespace delimiter
+	
+$arr = array();
+
+
+
+
+
+//if(isset($_POST["allForums"])) {
+function forumDisplay(){
+    try{
+
+		$forumRoot = new ParseQuery("forumRoot");
+	    $forumTrees = $forumRoot->descending("updatedAt")->find();
+
+	    foreach($forumTrees as $forumRoot){
+	    	$createdBy = $forumRoot->get("createdBy");
+			$createdBy->fetch();
+
+			$arr[] = array('id' => $forumRoot->getObjectId(),
+				'title' => $forumRoot->get("title"),
+				'createdBy' => $createdBy->get("name"),
+				'createdAt' => $forumRoot->getCreatedAt()->format('M d,Y, g:ia') ." UTC",
+				'updatedAt' => $forumRoot->getUpdatedAt()->format('M d,Y, g:ia') ." UTC");
+
+    		echo $forumRoot->get("title"). " BY: " . $createdBy->get("name") . " last updated: " . $forumRoot->getUpdatedAt()->format('M d,Y, g:ia') ." UTC<br>";
+	    }
+
+    } catch (ParseException $ex) {
+         
+    }
+    echo json_encode($arr);
+}
+
+
+
+if(isset($_POST["allForums"])) {
+   try{
+
+		$forumRoot = new ParseQuery("forumRoot");
+	    $forumTrees = $forumRoot->descending("updatedAt")->find();
+
+	    foreach($forumTrees as $forumRoot){
+	    	$createdBy = $forumRoot->get("createdBy");
+			$createdBy->fetch();
+
+			$arr[] = array('id' => $forumRoot->getObjectId(),
+				'title' => $forumRoot->get("title"),
+				'createdBy' => $createdBy->get("name"),
+				'createdAt' => $forumRoot->getCreatedAt()->format('M d,Y, g:ia') ." UTC",
+				'updatedAt' => $forumRoot->getUpdatedAt()->format('M d,Y, g:ia') ." UTC");
+	    }
+
+    } catch (ParseException $ex) {
+         
+    }
+    echo json_encode($arr);
+}
+
+
+
+if(isset($_POST["keywords"])) {
+    $keywords = "/".$_POST['keywords']."/i";
+    try{
+
+        $forumRoot = new ParseQuery("forumRoot");
+	    $forumTrees = $forumRoot->descending("updatedAt")->find();
+
+    	foreach($forumTrees as $forumRoot){
+	    	$createdBy = $forumRoot->get("createdBy");
+			$createdBy->fetch();
+			$string = $forumRoot->get("title") . " " . $createdBy->get("name") . " " . $createdBy->get("email");
+			if( preg_match( $keywords, $string )){
+			$arr[] = array('id' => $forumRoot->getObjectId(),
+				'title' => $forumRoot->get("title"),
+				'createdBy' => $createdBy->get("name"),
+				'createdAt' => $forumRoot->getCreatedAt()->format('M d,Y, g:ia') ." UTC",
+				'updatedAt' => $forumRoot->getUpdatedAt()->format('M d,Y, g:ia') ." UTC");
+	    	}
+	    }
+
+
+    } catch (ParseException $ex) {
+         
+    }
+    echo json_encode($arr);
 
 }
-	
-
 ?>

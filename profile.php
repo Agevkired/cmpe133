@@ -139,7 +139,9 @@
                 //destroyConnection($currentUser,"emmendoza1986@gmail.com");
                 seeConnectionRequest($currentUser);
                 displayConnections($currentUser);
-                //createNewForumRoot($currentUser, "Hello World!", "First post ever!", "hello,world , first, post ,ever");
+                //search("apples");
+                forumDisplay();
+                //createNewForumRoot($currentUser, "What is the answer to life?", "To exist and continue your existance?.", "universe,deep,religion,god");
                 //createForumPost("m88yAYyvqM", $currentUser, "Third post ever.");
                 //displayForumRoot("m88yAYyvqM");
                 /*

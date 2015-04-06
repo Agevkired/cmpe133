@@ -50,7 +50,8 @@
 	});
 	</script> 
 </head>
-<body>
+  <body onload="myFunction()">
+
 
 <!-- START OF HEADER-->
 <div id="header"></div>
@@ -75,38 +76,19 @@
 </div>
 <div class="container">
     <div class="row">
-        <form role="form">
             <div class="col-md-6 col-md-push-3">
-                <p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>Title</b></a><br>Posted by: <font size='-1'><b>Emmanuel</b> on DATE</font></p>
-                <p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>Title</b></a><br>Posted by: <font size='-1'><b>Emmanuel</b> on DATE</font></p>
-                <p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>Title</b></a><br>Posted by: <font size='-1'><b>Emmanuel</b> on DATE</font></p>
-                <p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>Title</b></a><br>Posted by: <font size='-1'><b>Emmanuel</b> on DATE</font></p>
+                <form role="form" method="post">
+                    <input type="text" class="form-control" id="keyword" placeholder="Enter keyword">
+                </form>
 
-                <?php/*
-                    include_once('../database/connect.php');
-                    $sql="SELECT * FROM Post ORDER BY post_title ASC";
-                    $res = mysql_query($sql) or die(mysql_error());
-                    $topics="";
-                    $count =0;
-                    if(mysql_num_rows($res) > 0)
-                    {
-                        while($row= mysql_fetch_assoc($res))
-                        {
-                            $id=$row['post_id'];
-                            $title=$row['post_title'];
-                            $creator=$row['post_creator'];
-                            $date=$row['post_date'];
-                           
-                        $topics .="<p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>".$title."</b></a><br>Posted by: <font size='-1'><b>".$creator."</b> on ". $date."</font></p>";
-                            $count = $count +1;
-                        }
-                        echo 'Total Number of Forum Posts are: '.$count;
-                        echo $topics;
-                    }
-                    else { echo '<p>There are no Posts Available Yet!</p>';}
-                */?>
+                <p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>Title</b></a><br>Posted by: <font size='-1'><b>Emmanuel</b> on DATE</font></p>
+                <p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>Title</b></a><br>Posted by: <font size='-1'><b>Emmanuel</b> on DATE</font></p>
+                <p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>Title</b></a><br>Posted by: <font size='-1'><b>Emmanuel</b> on DATE</font></p>
+                <p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>Title</b></a><br>Posted by: <font size='-1'><b>Emmanuel</b> on DATE</font></p>
+                <div id="content"></div>
+                
             </div>
-        </form>
+        
 
     </div>
 </div>
@@ -133,5 +115,43 @@
 
 <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    function myFunction() {
+        $.post('search.php', { allForums: true }, function(data) {
+                    $('#content').empty()
+                    $.each(data, function() {
+                        $('#content').append('<p class=\'topic_blocks\'><a href="addUser.php?id=' + this.id + '">' + this.name + '</a><br> ' + this.email + '</li>');
+                    });
+                }, "json");
+    }
+    </script>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#keyword').on('input', function() {
+            var searchKeyword = $(this).val();
+            if (searchKeyword.length >= 3) {
+                $.post('search.php', { keywords: searchKeyword }, function(data) {
+                    $('#content').empty()
+                    $.each(data, function() {
+                        $('#content').append('<p class=\'topic_blocks\'><a href="addUser.php?id=' + this.id + '">' + this.name + '</a><br> ' + this.email + '</li>');
+                    });
+                }, "json");
+            }else if(searchKeyword.length == 0){//added
+                    $.post('search.php', { allForums: true }, function(data) {
+                    $('#content').empty()
+                    $.each(data, function() {
+                        $('#content').append('<p class=\'topic_blocks\'><a href="addUser.php?id=' + this.id + '">' + this.name + '</a><br> ' + this.email + '</li>');
+                    });
+                }, "json");
+            }//added
+            
+        });
+    });
+    </script>
+
 </body>
 </html>

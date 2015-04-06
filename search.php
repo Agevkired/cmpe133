@@ -1,55 +1,68 @@
 <?php
-use Parse\ParseObject;
-use Parse\ParseUser;
-use Parse\ParseException;
+require 'auth.php';
 
-function msgr($currentUser){
+use Parse\ParseUser;
+use Parse\ParseObject;
+use Parse\ParseQuery;
+use Parse\ParseException;
+/*
+function search($searchString){
+    $arr = array();
     
-    // Create the post
-    /*
-    $myPost = new ParseObject("Post");
-    $myPost->set("title", "I'm Hungry");
-    $myPost->set("content", "Where should we go for lunch?");
-    
-    // Create the comment
-    $myComment = new ParseObject("Comment");
-    
-    $myComment->set("content", "Let's do Sushirrito.");
-     
-    // Add the post as a value in the comment
-    $myPost->set("child", $myComment);
-    $myPost->save();
-    $myComment->set("parent", $myPost);
-     
-    // This will save both myPost and myComment
-    $myComment->save();
-    
-    try {
-        $currentUser->set("msgTest", $myPost );
-        $currentUser->save(true);
-      // The current user is now set to user.
+    try{
+        $query = ParseUser::query();//exists("Profile")
+        $results = $query->ascending("name")->find();
+        echo count($results);
+        foreach($results as $user){
+            $arr[] = array('id' => $obj->ID, 'title' => $obj->post_title);
+            echo $user->getObjectId() . " - " . $user->get('name') . " - " . $user->getEmail(). "<br>";
+        }
+
     } catch (ParseException $ex) {
-      // The token could not be validated.
-        echo $ex->getMessage().".<br>";
-    }*/
-    echo "Authenticated: ".$currentUser->isAuthenticated()."<br>";//debugging
-    try {
-        $currentUser->fetch();
-        $post = $currentUser->get("msgTest");
-        $post->fetch();
-        //var_dump($post);
-        echo $post->get("title")."<br>";
-        echo $post->get("content")."<br>";
-        $post = $post->get("child");
-        $post->fetch();
-        echo $post->get("content")."<br>";
         
-        //The object was retrieved successfully.
-    } catch (ParseException $ex) {
-        // The object was not retrieved successfully.
-        // error is a ParseException with an error code and message.
-        echo $ex->getMessage().".<br>";
     }
+    echo json_encode($arr);
+
+*/
+$arr = array();
+
+if(isset($_POST["keywords"])) {
+    $keywords = "/".$_POST['keywords']."/i";
+    try{
+        $query = ParseUser::query();//exists("Profile")
+        $results = $query->ascending("name")->find();
+        //echo count($results);
+        foreach($results as $user){
+            $string = $user->get('name')." ".$user->getEmail();
+            if( preg_match( $keywords, $string )){
+                $arr[] = array('id' => $user->getObjectId(), 'name' => $user->get('name'), 'email' => $user->getEmail());
+            }
+        }
+
+    } catch (ParseException $ex) {
+         
+    }
+    echo json_encode($arr);
+
+}
+
+if(isset($_POST["allForums"])) {
+        
+    try{
+        $query = ParseUser::query();//exists("Profile")
+        $results = $query->ascending("name")->find();
+        //echo count($results);
+        foreach($results as $user){
+            $string = $user->get('name')." ".$user->getEmail();
+            
+                $arr[] = array('id' => $user->getObjectId(), 'name' => $user->get('name'), 'email' => $user->getEmail());
+            
+        }
+
+    } catch (ParseException $ex) {
+         
+    }
+    echo json_encode($arr);
 }
 
 ?>

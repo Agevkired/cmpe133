@@ -1,0 +1,137 @@
+<?php
+    /**
+    * ProConnect
+    * members.php
+    * Members only page
+    * @version 1.0 - 03/07/2015
+    */
+
+    /* CONTAINS */
+    /* use Parse\ParseClient; AND ParseClient::initialize() */
+    /* KEEP SECRET */
+    require 'auth.php';
+
+
+    include "forumFunctions.php";
+
+    use Parse\ParseUser;
+    use Parse\ParseQuery;
+    use Parse\ParseObject;
+
+
+    ob_start(); 
+    if (!session_id()) session_start();
+    
+    $currentUser = "";
+    if (isset($_SESSION["proConnectUserSession"])) {
+        $currentUser = $_SESSION["proConnectUserSession"];
+        
+    }else{
+        echo "User not authenticated.";
+        header( "refresh:3;url=index.php" );
+        exit;
+    }
+
+    if(isset($_POST["submit"])) {
+        $title = $_POST["title"];
+        $searchTagString = $_POST["searchTags"];
+        $content = $_POST["content"];
+        createNewForumRoot($currentUser, $title, $content, $searchTagString);
+        header("Location: view_forum.php");
+    }
+?>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title> Forum! ProConnect</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="screen.css" rel="stylesheet">
+
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script> 
+	$(function(){
+	  $("#header").load("profile_header.html"); 
+	  $("#footer").load("footer.html"); 
+	});
+	</script> 
+</head>
+<body>
+
+<!-- START OF HEADER-->
+<div id="header"></div>
+<!-- END OF HEADER-->
+
+<!--
+
+WE NEED TO CHECK THE SESSION HERE
+session_start();
+if($_SESSION['id'] == "")
+	exit();
+
+-->
+
+
+<!-- Content of the page-->
+<div class="wrapper">
+<div class="col-md-9 col-md-push-4">
+	
+			<img src="http://packetpushers.net/wp-content/uploads/2012/10/forumlogo.jpg" height="300px" align="center">
+
+	<p class="h4"> Welcome To ProConnect Forum<br> <small>24 March 2015</small></p>
+	<p class="text-justify">Forums allows you to add a discussion board.</p>
+
+	<div class="btn-group btn-group-justified" role="group" aria-label="...">
+	<div class="btn-group" role="group">
+		<button onclick="parent.location='view_forum.php'" class="btn btn-default" style="width: 100px; " >View Forum</button>
+		<button type="button" class="btn btn-default" style="width: 110px; " >Create Post</button>
+	</div>
+	</div>
+	<br><br>
+</div>
+<div class="container">
+    <div class="row">
+        <form role="form" action="create_forum.php" method="POST">
+            <div class="col-md-6 col-md-push-3">
+                <div class="well well-sm"><strong><span class="glyphicon glyphicon-asterisk"></span>Required Field</strong></div>
+                <div class="form-group">
+                    <label for="topic_title">Enter Title</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="title" id="title" placeholder="Enter forum post title" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="topic_creator">Enter Search Tags</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="searchTags" name="searchTags" placeholder="Enter search tags seperated by commas or spaces" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="topic_discription">Enter Content</label>
+                    <div class="input-group">
+                        <textarea name="content" id="content" class="form-control" rows="5" required></textarea>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-info pull-right">
+            </div>
+        </form>
+
+    </div>
+</div>
+  <div class="push"></div>
+</div>
+ <!-- END OF CONTENT-->
+
+<!-- START OF FOOTER -->
+ <div id="footer"></div>
+<!-- END OF FOOTER -->
+
+
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>

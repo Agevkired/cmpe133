@@ -48,7 +48,7 @@
 		$newUser->set("password", $pass);
 		$newUser->set("email", $email);
 		$newUser->set("name", $name);
-		$newUser->set("premium", false);
+		//$newUser->set("premium", false);
 		/* END of create parse user object */
 
 		/* START of parse sign up */

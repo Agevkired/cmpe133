@@ -1,39 +1,3 @@
-<?php
-    /**
-    * ProConnect
-    * members.php
-    * Members only page
-    * @version 1.0 - 03/07/2015
-    */
-
-    /* CONTAINS */
-    /* use Parse\ParseClient; AND ParseClient::initialize() */
-    /* KEEP SECRET */
-    require 'auth.php';
-
-
-    include "forumFunctions.php";
-
-    use Parse\ParseUser;
-    use Parse\ParseQuery;
-    use Parse\ParseObject;
-
-
-    ob_start(); 
-    if (!session_id()) session_start();
-    
-    $currentUser = "";
-    if (isset($_SESSION["proConnectUserSession"])) {
-        $currentUser = $_SESSION["proConnectUserSession"];
-        
-    }else{
-        echo "User not authenticated.";
-        header( "refresh:3;url=index.php" );
-        exit;
-    }
-    
-?>
-
 <html>
 <head>
 	<meta charset="utf-8">
@@ -77,12 +41,7 @@
     <div class="row">
         <form role="form">
             <div class="col-md-6 col-md-push-3">
-                <p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>Title</b></a><br>Posted by: <font size='-1'><b>Emmanuel</b> on DATE</font></p>
-                <p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>Title</b></a><br>Posted by: <font size='-1'><b>Emmanuel</b> on DATE</font></p>
-                <p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>Title</b></a><br>Posted by: <font size='-1'><b>Emmanuel</b> on DATE</font></p>
-                <p class='topic_blocks'><a href ='view_post.php?cid=".$id."' ><b>Title</b></a><br>Posted by: <font size='-1'><b>Emmanuel</b> on DATE</font></p>
-
-                <?php/*
+                <?php
                     include_once('../database/connect.php');
                     $sql="SELECT * FROM Post ORDER BY post_title ASC";
                     $res = mysql_query($sql) or die(mysql_error());
@@ -104,7 +63,7 @@
                         echo $topics;
                     }
                     else { echo '<p>There are no Posts Available Yet!</p>';}
-                */?>
+                ?>
             </div>
         </form>
 

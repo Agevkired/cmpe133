@@ -14,6 +14,7 @@ Parse.Cloud.beforeSave(Parse.User, function(request, response) {
 
 		var str = request.object.get("name");
 
+		/* format name to have upper case first letters */
 		str = str.replace(/[^\s]+/g, function(word) {
 		  return word.replace(/^./, function(first) {
 		    return first.toUpperCase();
@@ -21,6 +22,10 @@ Parse.Cloud.beforeSave(Parse.User, function(request, response) {
 		});
 		request.object.set("name", str);
 
+		/* if client side forgets to set premium flag */
+		if ( !request.object.get("premium") ) {
+			request.object.set("premium", false);
+		}
 		response.success();
   	}
 

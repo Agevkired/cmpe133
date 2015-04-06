@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>DEMO</title>
+</head>
+  <body onload="myFunction()">
+    <form role="form" method="post">
+        <input type="text" class="form-control" id="keyword" placeholder="Enter keyword">
+    </form>
+    <ul id="content"></ul>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    function myFunction() {
+        $.post('search.php', { allForums: true }, function(data) {
+                    $('ul#content').empty()
+                    $.each(data, function() {
+                        $('ul#content').append('<li><a href="addUser.php?id=' + this.id + '">' + this.name + '</a><br> ' + this.email + '</li>');
+                    });
+                }, "json");
+    }
+    </script>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#keyword').on('input', function() {
+            var searchKeyword = $(this).val();
+            if (searchKeyword.length >= 3) {
+                $.post('search.php', { keywords: searchKeyword }, function(data) {
+                    $('ul#content').empty()
+                    $.each(data, function() {
+                        $('ul#content').append('<li><a href="addUser.php?id=' + this.id + '">' + this.name + '</a><br> ' + this.email + '</li>');
+                    });
+                }, "json");
+            }else if(searchKeyword.length == 0){//added
+                    $.post('search.php', { allForums: true }, function(data) {
+                    $('ul#content').empty()
+                    $.each(data, function() {
+                        $('ul#content').append('<li><a href="addUser.php?id=' + this.id + '">' + this.name + '</a><br> ' + this.email + '</li>');
+                    });
+                }, "json");
+            }//added
+            
+        });
+    });
+    </script>
+  </body>
+</html>

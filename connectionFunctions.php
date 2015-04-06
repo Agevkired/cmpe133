@@ -185,7 +185,7 @@ function destroyConnection($currentUser, $unfriendId){
     //$unfriend = $query->first(); // only get first result
     //echo "Successfully retrieved " . count($unfriend) . " results.<br>";// debugging
     //echo $unfriend->get("name")."<br>"; // debugging
-    
+
     $currentUser->getRelation("connections")->remove($unfriend);
     $currentUser->save(true);
 
@@ -199,5 +199,19 @@ function destroyConnection($currentUser, $unfriendId){
     }
 }
 
+function search($searchString){
+    echo "<br>SEARCH START <br>";
+    try{
+        $query = ParseUser::query();//exists("Profile")
+        $results = $query->ascending("name")->find();
+        echo count($results);
+        foreach($results as $user){
+            echo $user->getObjectId() . " - " . $user->get('name') . " - " . $user->getEmail(). "<br>";
+        }
 
+    } catch (ParseException $ex) {
+        echo $ex->getMessage().".<br>";
+    }
+    echo "SEARCH END <br>";
+}
 ?>
