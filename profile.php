@@ -140,7 +140,7 @@
                 seeConnectionRequest($currentUser);
                 displayConnections($currentUser);
                 //search("apples");
-                forumDisplay();
+                //forumDisplay();
                 //createNewForumRoot($currentUser, "What is the answer to life?", "To exist and continue your existance?.", "universe,deep,religion,god");
                 //createForumPost("m88yAYyvqM", $currentUser, "Third post ever.");
                 //displayForumRoot("m88yAYyvqM");

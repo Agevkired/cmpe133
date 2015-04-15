@@ -121,7 +121,7 @@
         $.post('forumFunctions.php', { allForums: true }, function(data) {
                     $('#content').empty()
                     $.each(data, function() {
-                        $('#content').append('<p class=\'topic_blocks\'><b>Title: <a href="addUser.php?id=' 
+                        $('#content').append('<p class=\'topic_blocks\'><b>Title: <a href="view_thread.php?fid=' 
                             + this.id + '">' 
                             + this.title 
                             + '</a></b><br>By: ' 
@@ -145,7 +145,7 @@
                 $.post('forumFunctions.php', { keywords: searchKeyword }, function(data) {
                     $('#content').empty()
                     $.each(data, function() {
-                        $('#content').append('<p class=\'topic_blocks\'><b>Title: <a href="addUser.php?id=' 
+                        $('#content').append('<p class=\'topic_blocks\'><b>Title: <a href="view_thread.php?fid=' 
                             + this.id + '">' 
                             + this.title 
                             + '</a></b><br>By: ' 
@@ -161,7 +161,7 @@
                     $.post('forumFunctions.php', { allForums: true }, function(data) {
                     $('#content').empty()
                     $.each(data, function() {
-                        $('#content').append('<p class=\'topic_blocks\'><b>Title: <a href="addUser.php?id=' 
+                        $('#content').append('<p class=\'topic_blocks\'><b>Title: <a href="view_thread.php?fid=' 
                             + this.id + '">' 
                             + this.title 
                             + '</a></b><br>By: ' 
