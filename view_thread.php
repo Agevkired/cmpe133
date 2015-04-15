@@ -17,6 +17,7 @@
 
     include "forumFunctions.php";
 
+
     function displayForumThread(){
         if(isset($_GET["fid"])){
             try {
@@ -27,11 +28,15 @@
 
 
                 if($forumRoot){
-
+                    $_SESSION['fid'] = $forumRootObjectId;
                     $forumRoot->fetch();
+
+
                     echo "--------------------<br>";
                     echo $forumRoot->get("title")."<br>";
                     echo "--------------------<br>";
+
+
                     $forumPostsArray = $forumRoot->get("forumPost");
                     foreach($forumPostsArray as $forumPost){
                         $forumPost->fetch();
@@ -66,6 +71,11 @@
         echo "User not authenticated.";
         header( "refresh:3;url=index.php" );
         exit;
+    }
+
+    if(isset($_POST["submitComment"])){
+        createForumPost( $_SESSION['fid'] , $currentUser, $_POST["comment"] );
+        header("Location: view_thread.php?fid=".$_SESSION['fid'] );
     }
     
 ?>
@@ -116,11 +126,13 @@
                 <div>
                     <?php displayForumThread()  //generateForumHere?>
 
+                    <?php //if($_SESSION['fid']){ ?>
                     <form method="post" action="view_thread.php">
-                    <textarea name="comments" cols="25" rows="5">
+                    <textarea name="comment" cols="25" rows="5">
                     </textarea><br>
-                    <input type="submit" value="Submit" />
+                    <input type="submit" name="submitComment" value="Submit" />
                     </form>
+                    <?php //} ?>
                 </div>
                 
             </div>
