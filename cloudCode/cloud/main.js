@@ -33,6 +33,7 @@ Parse.Cloud.beforeSave(Parse.User, function(request, response) {
 
 
 /* force user to populate their profile object before save */
+/*
 Parse.Cloud.beforeSave("Profile", function(request, response) {
 	if (!request.object.get("currentPosition")) {
 		response.error("Please set a current position.");
@@ -51,7 +52,7 @@ Parse.Cloud.beforeSave("Profile", function(request, response) {
 	} else {
 		response.success();
 	}
-});
+});*/
 
 
 

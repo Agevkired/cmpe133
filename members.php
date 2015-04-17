@@ -12,7 +12,8 @@
     require 'auth.php';
 
 
-    include "connectionFunctions.php"; // Development Testing, Connections
+    //include "connectionFunctions.php"; // Development Testing, Connections
+    include "profileFunctions.php"; // Development Testing, Connections
 
     use Parse\ParseUser;
 	use Parse\ParseQuery;
@@ -26,16 +27,14 @@
     if (isset($_SESSION["proConnectUserSession"])) {
         $currentUser = $_SESSION["proConnectUserSession"];
         echo "Hello " . $currentUser->get("name") .", This is the members page.<br>";
-        if($currentUser->get("emailVerified") != true){
-        	echo "An email has been sent to your inbox.<br>";
-       		echo "Please verify your email: " . $currentUser->get("email") . ".<br>";
-    	}
+        
 
         /* development testing */
         //createProfile($currentUser);
         //createConnectionRequest($currentUser, "emendoza1986@gmail.com");
-        seeConnectionRequest($currentUser);
-        displayConnections($currentUser);
+        //seeConnectionRequest($currentUser);
+        //displayConnections($currentUser);
+        createExperience($currentUser, "Google", "Analyst", 4, 2014, false, 6, 2015);
     }else{
     	echo "User not authenticated.";
 	    header( "refresh:3;url=index.php" );
