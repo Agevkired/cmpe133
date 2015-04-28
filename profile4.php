@@ -19,7 +19,6 @@
     use Parse\ParseUser;
     use Parse\ParseQuery;
     use Parse\ParseObject;
-    use Parse\ParseException;
 
 
     ob_start(); 
@@ -35,13 +34,6 @@
         exit;
     }
     
-    if(isset($_POST["submit"])) {
-        $title = $_POST["title"];
-        $searchTagString = $_POST["searchTags"];
-        $content = $_POST["content"];
-        createNewForumRoot($currentUser, $title, $content, $searchTagString);
-        header("Location: view_forum.php");
-    }
 ?>
 
 <!DOCTYPE html>
@@ -56,7 +48,7 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 	<!-- end main dependencies -->
 
-	<link href="mainTemplate.css" rel="stylesheet">
+	<link href="profile2.css" rel="stylesheet">
 
     <script> 
     $(function(){
@@ -70,17 +62,17 @@
 <div id="header"></div>
 </header>
 <!-- END OF HEADER-->
-<body>
+<body onload="myFunction()">
 
 <?php // START
 
-$name = $currentUser->get("name");
-sideMenuAndStartMainDisplay($name);
+sideMenuAndStartMainDisplay();
 
-forumCreateMain();
+forumMain();
 
 endMainDisplay();
 
+forumJavascript();
 
 // END ?>
 </body>

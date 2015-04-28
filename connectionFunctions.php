@@ -33,14 +33,14 @@ function createProfile($currentUser){
 }
 
 
-function createConnectionRequest( $currentUser, $friendsEmail ){
+function createConnectionRequest( $currentUser, $friendsId ){
 
     /* START OF FIND CONNECTION */
     $query = ParseUser::query();
-    $query->equalTo("email", $friendsEmail); 
+    $query->equalTo("objectId", $friendsId); 
     $friend = $query->first(); // only get first result
-    echo "Successfully retrieved " . count($friend) . " results.<br>";// debugging
-    echo $friend->get("name")."<br>"; // debugging
+    //echo "Successfully retrieved " . count($friend) . " results.<br>";// debugging
+    //echo $friend->get("name")."<br>"; // debugging
 
     $checkConnectionRequest = new ParseQuery("connectionRequest");
     $currentUser->fetch();
@@ -66,13 +66,13 @@ function createConnectionRequest( $currentUser, $friendsEmail ){
             $connectionRequest->set("toUser", $friend);
             // user2Accepts is left undefined until user2 accepts or denys
             $connectionRequest->save(true);
-            echo "successfully created connectionRequest<br>";
+            echo "You have sent a connection request to ". $friend->get("name").".<br>";
 
         } catch (ParseException $ex) {
             echo $ex->getMessage().".<br>";
         }
     }else{
-        echo "You already have a pending connection request with ". $friend->get("name")."<br>";
+        echo "You currently have a pending connection request with ". $friend->get("name").".<br>";
     }
     
     /* END OF CONNECTION REQUEST */

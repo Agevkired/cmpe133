@@ -12,9 +12,12 @@
     require 'auth.php';
 
     include "mainTemplate.php";
-    include "forumTemplate.php";
 
-    include "forumFunctions.php";
+    include "connectionFunctions.php";
+    
+    include "connectionTemplate.php";
+
+    
 
     use Parse\ParseUser;
     use Parse\ParseQuery;
@@ -35,13 +38,6 @@
         exit;
     }
     
-    if(isset($_POST["submit"])) {
-        $title = $_POST["title"];
-        $searchTagString = $_POST["searchTags"];
-        $content = $_POST["content"];
-        createNewForumRoot($currentUser, $title, $content, $searchTagString);
-        header("Location: view_forum.php");
-    }
 ?>
 
 <!DOCTYPE html>
@@ -70,17 +66,16 @@
 <div id="header"></div>
 </header>
 <!-- END OF HEADER-->
-<body>
+<body onload="myFunction()"><!--fn located in forumJavascript -->
 
 <?php // START
 
 $name = $currentUser->get("name");
 sideMenuAndStartMainDisplay($name);
 
-forumCreateMain();
+connectionsMain($currentUser);
 
 endMainDisplay();
-
 
 // END ?>
 </body>

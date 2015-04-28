@@ -11,7 +11,13 @@
 			
 			<a class="navbar-brand" href="#"><img src="img/31FB6BpGkHL._SX300_.jpg"  class="img-rounded" alt="logo" width="80px" height="25px"></a>
 		</div>
-
+		<div class="col-md-8 col-md-offset-2">
+			<form class="navbar-form" role="search">
+	        <div class="form-group">
+	        	<input type="text" class="Form-Control" size="50" placeholder="Search for people, jobs, companies, and more...">
+	        </div>
+	        </form>
+	    </div>
 
 		<div class="collapse navbar-collapse navbar-right" id="bs-PC-navbar-collapse-1">
 			<ul class="nav navbar-nav">

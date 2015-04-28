@@ -12,9 +12,12 @@
     require 'auth.php';
 
     include "mainTemplate.php";
-    include "forumTemplate.php";
 
-    include "forumFunctions.php";
+    include "connectionFunctions.php";
+
+    include "connectionTemplate.php";
+
+    
 
     use Parse\ParseUser;
     use Parse\ParseQuery;
@@ -34,14 +37,15 @@
         header( "refresh:3;url=index.php" );
         exit;
     }
-    
-    if(isset($_POST["submit"])) {
-        $title = $_POST["title"];
-        $searchTagString = $_POST["searchTags"];
-        $content = $_POST["content"];
-        createNewForumRoot($currentUser, $title, $content, $searchTagString);
-        header("Location: view_forum.php");
+
+    $uid = "";
+    if(isset($_GET["id"])){
+        $_SESSION['id'] = $_GET["id"];
+        $uid = $_GET["id"];
+    }elseif(isset($_SESSION["id"])){
+        $uid = $_SESSION['id'];
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -77,10 +81,9 @@
 $name = $currentUser->get("name");
 sideMenuAndStartMainDisplay($name);
 
-forumCreateMain();
+createConnectionMain( $currentUser, $uid );
 
 endMainDisplay();
-
 
 // END ?>
 </body>

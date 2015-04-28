@@ -26,90 +26,12 @@
                 $forumRoot->equalTo("objectId", $forumRootObjectId );
                 $forumRoot = $forumRoot->first();
 
-
-?>
-<div class="container"><!--Forum Display Start -->
-            <div class="row">
-                <div class="col-md-8">
-                  <div class="page-header">
-                    <h1><small class="pull-right">45 comments</small> Comments </h1>
-                  </div> 
-                   <div class="comments-list">
-                    <!-- comment start -->
-                       <div class="media">
-                           <p class="pull-right"><small>5 days ago</small></p>
-                            <a class="media-left" href="#">
-                              <img src="http://lorempixel.com/40/40/people/1/">
-                            </a>
-                            <div class="media-body">
-                                
-                              <h4 class="media-heading user_name">Baltej Singh</h4>
-                              Wow! this is really great.
-                              
-                              <p><small><a href="">Like</a> - <a href="">Share</a></small></p>
-                            </div>
-                          </div>
-                        <!-- comment end -->
-                       <div class="media">
-                           <p class="pull-right"><small>5 days ago</small></p>
-                            <a class="media-left" href="#">
-                              <img src="http://lorempixel.com/40/40/people/2/">
-                            </a>
-                            <div class="media-body">
-                                
-                              <h4 class="media-heading user_name">Baltej Singh</h4>
-                              Wow! this is really great.
-                              
-                              <p><small><a href="">Like</a> - <a href="">Share</a></small></p>
-                            </div>
-                          </div>
-                       <div class="media">
-                           <p class="pull-right"><small>5 days ago</small></p>
-                            <a class="media-left" href="#">
-                              <img src="http://lorempixel.com/40/40/people/3/">
-                            </a>
-                            <div class="media-body">
-                                
-                              <h4 class="media-heading user_name">Baltej Singh</h4>
-                              Wow! this is really great.
-                              
-                              <p><small><a href="">Like</a> - <a href="">Share</a></small></p>
-                            </div>
-                          </div>
-                       <div class="media">
-                           <p class="pull-right"><small>5 days ago</small></p>
-                            <a class="media-left" href="#">
-                              <img src="http://lorempixel.com/40/40/people/4/">
-                            </a>
-                            <div class="media-body">
-                                
-                              <h4 class="media-heading user_name">Baltej Singh</h4>
-                              Wow! this is really great.
-                              
-                              <p><small><a href="">Like</a> - <a href="">Share</a></small></p>
-                            </div>
-                          </div>
-                   </div>
-                    
-                    
-                    
-                </div>
-            </div>
-        </div><!--Forum Display End -->
-<?php
-
-
-
-
-
-
-
                 if($forumRoot){
                     $_SESSION['fid'] = $forumRootObjectId;
                     $forumRoot->fetch();
 
                     ?>
-<div class="container"><!--Forum Display Start -->
+        <div class="container"><!--Forum Display Start -->
             <div class="row">
                 <div class="col-md-8">
                   <div class="page-header">
@@ -238,22 +160,7 @@
             <div class="col-md-6 col-md-push-3">
                 <div>
                     <?php displayForumThread()  //generateForumHere?>
-                    
-                    <form method="post" action="view_thread.php">
-                                    <div class="form-group">
-                    <label for="topic_discription">Enter Comment</label>
-                    <div class="input-group">
-                        <textarea name="comment" id="content" class="form-control" rows="5" required></textarea>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
-                    </div>
-                </div>
-                <input type="submit" name="submitComment" id="submit" value="Submit" class="btn btn-info pull-right">
 
-                    
-                    <textarea name="comment" cols="25" rows="5">
-                    </textarea><br>
-                    <input type="submit" name="submitComment" value="Submit" />-->
-                    </form>
                     <?php //} ?>
                 </div>
                 
