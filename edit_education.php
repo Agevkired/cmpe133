@@ -70,7 +70,7 @@
 $name = $currentUser->get("name");
 sideMenuAndStartMainDisplay($name);
 
-profileMain( $currentUser );
+editEducationMain( $currentUser );
 
 endMainDisplay();
 
