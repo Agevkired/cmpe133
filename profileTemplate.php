@@ -235,7 +235,7 @@ function editEducationMain($currentUser){ ?>
                     <center>
                     <div class="btn-group" role="group">
     
-                        <button type="button" class="btn btn-default" style="width: 100px; " >View</button>
+                        <button onclick="parent.location='profile.php'" class="btn btn-default" style="width: 100px; " >View</button>
                         <button  onclick="parent.location='edit_profile.php'" class="btn btn-default" style="width: 110px; " >Edit</button>
     
                     </div>
@@ -317,7 +317,159 @@ function editEducationMain($currentUser){ ?>
 } // editEducationMain
 
 
+function editExperienceMain($currentUser){ ?>
 
+    <div class="row">
+    <div class="row profile">
+        <div class="col-md-12">
+            <div class="profile-sidebar">
+                <!-- SIDEBAR USERPIC -->
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                <div class="profile-userpic">
+                    <img src="img/profile-photo.jpg" class="img-responsive" alt="">
+                </div>
+
+                <!-- END SIDEBAR USERPIC -->
+                <!-- SIDEBAR USER TITLE -->
+                <div class="profile-usertitle">
+
+                    <div>
+                    <h4><?php echo $currentUser->get("name") ?></br><small><?php echo $currentUser->get("email") ?></small></h4>
+                    Bay Area, CA
+                    </div>
+                    <br>
+                </div>
+                </div>
+
+                <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                    <center>
+                    <div class="btn-group" role="group">
+    
+                        <button onclick="parent.location='profile.php'" class="btn btn-default" style="width: 100px; " >View</button>
+                        <button  onclick="parent.location='edit_profile.php'" class="btn btn-default" style="width: 110px; " >Edit</button>
+    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1"></div>
+            <div class="col-md-10">
+
+                <div class="panel panel-default">
+                <div class="panel-heading"><strong>Experience</strong></div>
+                <div class="panel-body">
+                    Insert Experience Here
+                </div>
+                </div>
+                
+            </div>
+        </div>  
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-1"></div>
+            <div class="col-md-10">
+    <form class="form-horizontal">
+<fieldset>
+
+<form class="form-horizontal">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Edit Experience</legend>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">Company</label>  
+  <div class="col-md-7">
+  <input id="textinput" name="textinput" type="text" placeholder="example: Google" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">Title</label>  
+  <div class="col-md-7">
+  <input id="textinput" name="textinput" type="text" placeholder="example: Software Engineer" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textarea">Description</label>
+  <div class="col-md-7">                     
+    <textarea class="form-control" id="textarea" name="textarea"></textarea>
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="selectbasic">Starting Month</label>
+  <div class="col-md-4">
+    <select id="selectbasic" name="selectbasic" class="form-control">
+      <?php monthSelect() ?>
+    </select>
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="selectbasic">Starting Year</label>
+  <div class="col-md-4">
+    <select id="selectbasic" name="selectbasic" class="form-control">
+      <?php yearSelect() ?>
+    </select>
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="selectbasic">Ending Month</label>
+  <div class="col-md-4">
+    <select id="selectbasic" name="selectbasic" class="form-control">
+        <option value="0">Present</option>
+        <?php monthSelect() ?>
+    </select>
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="selectbasic">Ending Year</label>
+  <div class="col-md-4">
+    <select id="selectbasic" name="selectbasic" class="form-control">
+        <option value="0">Present</option>
+        <?php yearSelect() ?>
+    </select>
+  </div>
+</div>
+
+<!-- Button (Double) -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="button1id"></label>
+  <div class="col-md-8">
+    <button id="button1id" name="button1id" class="btn btn-primary">Add</button>
+    <button id="button2id" name="button2id" class="btn btn-warning">Cancel</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
+
+<legend></legend>
+            </div>
+        </div>  
+    </div>
+
+<?php
+} // editExperienceMain
 
 function stateOptionPrint(){ ?>
     <option value="AL">Alabama</option>
@@ -494,4 +646,20 @@ function yearSelect(){ ?>
 
 <?php
 } // end of yearSelect
+function monthSelect(){ ?>
+    <option value="01">January</option>
+    <option value="02">February</option>
+    <option value="03">March</option>
+    <option value="04">April</option>
+    <option value="05">May</option>
+    <option value="06">June</option>
+    <option value="07">July</option>
+    <option value="08">August</option>
+    <option value="09">September</option>
+    <option value="10">October</option>
+    <option value="11">November</option>
+    <option value="12">December</option>
+<?php
+} // end of monthSelect
+
 ?>
