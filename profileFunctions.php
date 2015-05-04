@@ -6,6 +6,19 @@ use Parse\ParseQuery;
 use Parse\ParseUser;
 use Parse\ParseException;
 
+ob_start(); 
+if (!session_id()) session_start();
+
+$currentUser = "";
+if (isset($_SESSION["proConnectUserSession"])) {
+    $currentUser = $_SESSION["proConnectUserSession"];
+    $currentUser->fetch();
+}else{
+	echo "User not authenticated.";
+    header( "refresh:3;url=index.php" );
+    exit;
+}
+
 function createProfile($currentUser){
     
     /* START CREATE PROFILE OBJECT */
@@ -34,69 +47,122 @@ function createProfile($currentUser){
     /* end pointer to profile object */
 }
 
-function createNewForumRoot($currentUser, $title, $content, $searchTagString){
-$searchTagString = trim(strtolower($searchTagString));
+function editProfile($currentUser, $profilePicture, $currentTitle, $currentLocale, $currentState, $summary){
+    $currentUser->fetch();
+    $profile = $currentUser->get("profile");
 
-	try {
-		$forumPost = new ParseObject("forumPost");
-		$forumPost->set("createdBy", $currentUser);
-		$forumPost->set("content", $content);
-		$forumPost->save(true);
-		echo "<br>successfully created forumPost object<br>";//debugging
-	} catch (ParseException $ex) {
-        echo $ex->getMessage().".<br>";
+
+    /* IF PROFILE CREATED FOR THE FIRST TIME */
+    if( !$profile ){
+    	$name = $currentUser->get("name");
+    	$email = $currentUser->get("email");
+    	$profile = new ParseObject("profile");
+    	$profile->set("name", $name);
+    	$profile->set("email", $email);
+    	$profile->set("user", $currentUser );
+    	$profile->save(true);
+
+    	$currentUser->set("profile", $profile );
+        $currentUser->save(true);
     }
 
-
+	/* SET PROFILE */
     try {
-        $forumRoot = new ParseObject("forumRoot");
-        $forumRoot->set("createdBy", $currentUser); //pointer profile->user
-        $forumRoot->set("lastUpdatedBy", $currentUser);
-        $forumRoot->set("createdBy", $currentUser);
-        $forumRoot->set("postCount", 1);
-        $forumRoot->set("title", $title);
-        $forumRoot->set("searchTags", $searchTagString);
-        $forumRoot->addUnique("forumPost", [$forumPost]);
-        $forumRoot->save(true);
+    	$profile->fetch();
+    	$profile->set("profilePicture", $profilePicture);
+    	$profile->set("currentTitle", $currentTitle);
+    	$profile->set("currentLocale", $currentLocale);
+    	$profile->set("currentState", $currentState);
+    	$profile->set("summary", $summary);
+    	$profile->save(true);
 
-        echo "<br>successfully created forumRoot object<br>";//debugging
     } catch (ParseException $ex) {
-        echo $ex->getMessage().".<br>";
+    	echo $ex->getMessage().".<br>";
     }
-
-
+    header("Location: profile.php");
+    exit;
 }
-/*
-function createEducation($currentUser, $school, $degree, $gradyear){
 
-	try {
-		$forumPost = new ParseObject("education");
-		$forumPost->set("userPointer", $currentUser);
-		$forumPost->set("school", $school);
-		$forumPost->set("degree", $degree);
-		$forumPost->set("gradyear", $gradyear);
-		$forumPost->save(true);
-		echo "<br>successfully created forumPost object<br>";//debugging
-	} catch (ParseException $ex) {
-        echo $ex->getMessage().".<br>";
+function addEducation($currentUser, $school, $degree, $gradYear){
+    $currentUser->fetch();
+    $profile = $currentUser->get("profile");
+
+
+    /* IF PROFILE CREATED FOR THE FIRST TIME */
+    if( !$profile ){
+    	$name = $currentUser->get("name");
+    	$email = $currentUser->get("email");
+    	$profile = new ParseObject("profile");
+    	$profile->set("name", $name);
+    	$profile->set("email", $email);
+    	$profile->set("user", $currentUser );
+    	$profile->save(true);
+
+    	$currentUser->set("profile", $profile );
+        $currentUser->save(true);
     }
 
-
-
+	/* SET PROFILE */
     try {
-	    $forumRoot = new ParseQuery("forumRoot");
-	    $forumRoot->equalTo("objectId", $forumRootObjectId );
-	    $forumRoot = $forumRoot->first();
-	    $forumRoot->fetch();
-	    $forumRoot->addUnique("forumPost", [$forumPost]);
-        $forumRoot->save(true);
+    	$profile->fetch();
+    	$education = new ParseObject("education");
+    	$education->set("userProfile", $profile);
+    	$education->set("school", $school);
+    	$education->set("degree", $degree);
+    	$education->set("gradYear", $gradYear);
+    	$education->save(true);
 
-        echo "<br>successfully created forumRoot->forumPost object<br>";//debugging
-	} catch (ParseException $ex) {
-        echo $ex->getMessage().".<br>";
+    	$educationList = $profile->getRelation("educationList");
+    	$educationList->add($education);
+    	$profile->save(true);
+
+    } catch (ParseException $ex) {
+    	echo $ex->getMessage().".<br>";
+    }
+    header("Location: edit_education.php");
+    exit;
+} // end of AddEducation
+
+function addExperience($currentUser, $school, $degree, $gradYear){
+    $currentUser->fetch();
+    $profile = $currentUser->get("profile");
+
+
+    /* IF PROFILE CREATED FOR THE FIRST TIME */
+    if( !$profile ){
+    	$name = $currentUser->get("name");
+    	$email = $currentUser->get("email");
+    	$profile = new ParseObject("profile");
+    	$profile->set("name", $name);
+    	$profile->set("email", $email);
+    	$profile->set("user", $currentUser );
+    	$profile->save(true);
+
+    	$currentUser->set("profile", $profile );
+        $currentUser->save(true);
     }
 
-}*/
+	/* SET PROFILE */
+    try {
+    	$profile->fetch();
+    	$education = new ParseObject("education");
+    	$education->set("userProfile", $profile);
+    	$education->set("school", $school);
+    	$education->set("degree", $degree);
+    	$education->set("gradYear", $gradYear);
+    	$education->save(true);
+
+    	$educationList = $profile->getRelation("educationList");
+    	$educationList->add($education);
+    	$profile->save(true);
+
+    } catch (ParseException $ex) {
+    	echo $ex->getMessage().".<br>";
+    }
+    header("Location: edit_education.php");
+    exit;
+} // end of AddExperience
+
 
 function createExperience($currentUser, $company, $title, $sM, $sY, $present=false, $eM=0, $eY=0){
 
@@ -138,111 +204,43 @@ function createExperience($currentUser, $company, $title, $sM, $sY, $present=fal
 
 }
 
-function displayForumRoot($forumRootObjectId){
-	$forumRoot = new ParseQuery("forumRoot");
-    $forumRoot->equalTo("objectId", $forumRootObjectId );
-    $forumRoot = $forumRoot->first();
-    $forumRoot->fetch();
 
 
-    echo "--------------------<br>";
-    echo $forumRoot->get("title")."<br>";
-    echo "--------------------<br>";
-	$forumPostsArray = $forumRoot->get("forumPost");
-	foreach($forumPostsArray as $forumPost){
-		$forumPost->fetch();
-		$createdBy = $forumPost->get("createdBy");
-		$createdBy->fetch();
 
-		echo $createdBy->get("name") . ": " .  $forumPost->get("content") . "<br>";
-	}
+
+
+// EDIT PROFILE FUNCTION
+if(isset($_POST["editProfile"])) {
+
+	$profilePicture = "";
+	if(isset($_POST["profilePicture"])) $profilePicture = $_POST["profilePicture"];
+	$currentTitle = $_POST["currentTitle"];
+	$currentLocale = $_POST["currentLocale"];
+	$currentState = $_POST["currentState"];
+	$summary = $_POST["summary"];
+
+
+	editProfile($currentUser, $profilePicture, $currentTitle, $currentLocale, $currentState, $summary);
+
 }
 
-	
-$arr = array();
+if(isset($_POST["addEducation"])) {
+	$school = $_POST["school"];
+	$degree = $_POST["degree"];
+	$gradYear = $_POST["gradYear"];
 
-
-
-
-
-//if(isset($_POST["allForums"])) {
-function forumDisplay(){
-    try{
-
-		$forumRoot = new ParseQuery("forumRoot");
-	    $forumTrees = $forumRoot->descending("updatedAt")->find();
-
-	    foreach($forumTrees as $forumRoot){
-	    	$createdBy = $forumRoot->get("createdBy");
-			$createdBy->fetch();
-
-			$arr[] = array('id' => $forumRoot->getObjectId(),
-				'title' => $forumRoot->get("title"),
-				'createdBy' => $createdBy->get("name"),
-				'createdAt' => $forumRoot->getCreatedAt()->format('M d,Y, g:ia') ." UTC",
-				'updatedAt' => $forumRoot->getUpdatedAt()->format('M d,Y, g:ia') ." UTC");
-
-    		echo $forumRoot->get("title"). " BY: " . $createdBy->get("name") . " last updated: " . $forumRoot->getUpdatedAt()->format('M d,Y, g:ia') ." UTC<br>";
-	    }
-
-    } catch (ParseException $ex) {
-         
-    }
-    echo json_encode($arr);
+	addEducation($currentUser, $school, $degree, $gradYear);
 }
 
+if(isset($_POST["addExperience"])) {
+	$company = $_POST["company"];
+	$title = $_POST["title"];
+	$desc = $_POST["desc"];
+	$sM = $_POST["sM"];
+	$sY = $_POST["sY"];
+	$eM = $_POST["eM"];
+	$eY = $_POST["eY"];
 
-
-if(isset($_POST["allForums"])) {
-   try{
-
-		$forumRoot = new ParseQuery("forumRoot");
-	    $forumTrees = $forumRoot->descending("updatedAt")->find();
-
-	    foreach($forumTrees as $forumRoot){
-	    	$createdBy = $forumRoot->get("createdBy");
-			$createdBy->fetch();
-
-			$arr[] = array('id' => $forumRoot->getObjectId(),
-				'title' => $forumRoot->get("title"),
-				'createdBy' => $createdBy->get("name"),
-				'createdAt' => $forumRoot->getCreatedAt()->format('M d,Y, g:ia') ." UTC",
-				'updatedAt' => $forumRoot->getUpdatedAt()->format('M d,Y, g:ia') ." UTC");
-	    }
-
-    } catch (ParseException $ex) {
-         
-    }
-    echo json_encode($arr);
-}
-
-
-
-if(isset($_POST["keywords"])) {
-    $keywords = "/".$_POST['keywords']."/i";
-    try{
-
-        $forumRoot = new ParseQuery("forumRoot");
-	    $forumTrees = $forumRoot->descending("updatedAt")->find();
-
-    	foreach($forumTrees as $forumRoot){
-	    	$createdBy = $forumRoot->get("createdBy");
-			$createdBy->fetch();
-			$string = $forumRoot->get("title") . " " . $createdBy->get("name") . " " . $createdBy->get("email");
-			if( preg_match( $keywords, $string )){
-			$arr[] = array('id' => $forumRoot->getObjectId(),
-				'title' => $forumRoot->get("title"),
-				'createdBy' => $createdBy->get("name"),
-				'createdAt' => $forumRoot->getCreatedAt()->format('M d,Y, g:ia') ." UTC",
-				'updatedAt' => $forumRoot->getUpdatedAt()->format('M d,Y, g:ia') ." UTC");
-	    	}
-	    }
-
-
-    } catch (ParseException $ex) {
-         
-    }
-    echo json_encode($arr);
-
+	addExperience($company, $title, $desc, $sM, $sY, $eM, $eM);
 }
 ?>

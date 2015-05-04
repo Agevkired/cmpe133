@@ -120,7 +120,7 @@ function editProfileMain($currentUser){ ?>
         <div class="col-md-1"></div>
             <div class="col-md-10">
   
-<form class="form-horizontal">
+<form class="form-horizontal" role="form" action="profileFunctions.php" method="POST">
 <fieldset>
 
 <!-- Form Name -->
@@ -130,7 +130,7 @@ function editProfileMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="filebutton">Profile Picture</label>
   <div class="col-md-6">
-    <input id="filebutton" name="filebutton" class="input-file" type="file">
+    <input id="filebutton" name="profilePicture" class="input-file" type="file">
   </div>
 </div>
 
@@ -138,7 +138,7 @@ function editProfileMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="textinput">Current Title</label>  
   <div class="col-md-6">
-  <input id="textinput" name="textinput" type="text" placeholder="example: student" class="form-control input-md" required="">
+  <input id="textinput" name="currentTitle" type="text" placeholder="example: Student" class="form-control input-md" required="">
     
   </div>
 </div>
@@ -147,7 +147,7 @@ function editProfileMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="textinput">Current Locale</label>  
   <div class="col-md-6">
-  <input id="textinput" name="textinput" type="text" placeholder="example: SF Bay Area" class="form-control input-md">
+  <input id="textinput" name="currentLocale" type="text" placeholder="example: SF Bay Area" class="form-control input-md">
     
   </div>
 </div>
@@ -156,7 +156,7 @@ function editProfileMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="selectbasic">Current State</label>
   <div class="col-md-4">
-    <select id="selectbasic" name="selectbasic" class="form-control">
+    <select id="selectbasic" name="currentState" class="form-control">
       <?php stateOptionPrint() ?>
     </select>
   </div>
@@ -166,7 +166,7 @@ function editProfileMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="textarea">Summary</label>
   <div class="col-md-7">                     
-    <textarea class="form-control" id="textarea" name="textarea"></textarea>
+    <textarea class="form-control" id="textarea" name="summary" required></textarea>
   </div>
 </div>
 
@@ -190,7 +190,7 @@ function editProfileMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="button1id"></label>
   <div class="col-md-4">
-    <button id="button1id" name="save" class="btn btn-primary">Save</button>
+    <button id="button1id" name="editProfile" class="btn btn-primary">Save</button>
     <button id="button2id" onclick="parent.location='profile.php'" class="btn btn-warning">Cancel</button>
   </div>
 </div>
@@ -263,7 +263,7 @@ function editEducationMain($currentUser){ ?>
     <div class="row">
         <div class="col-md-1"></div>
             <div class="col-md-10">
-    <form class="form-horizontal">
+    <form class="form-horizontal"  role="form" action="profileFunctions.php" method="POST">
 <fieldset>
 
 <!-- Form Name -->
@@ -273,7 +273,7 @@ function editEducationMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="textinput">School</label>  
   <div class="col-md-7">
-  <input id="textinput" name="textinput" type="text" placeholder="example: San Jose State University" class="form-control input-md" required="">
+  <input id="textinput" name="school" type="text" placeholder="example: San Jose State University" class="form-control input-md" required="">
     
   </div>
 </div>
@@ -282,7 +282,7 @@ function editEducationMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="textinput">Degree</label>  
   <div class="col-md-7">
-  <input id="textinput" name="textinput" type="text" placeholder="example: Bachelor of Science in Computer Science" class="form-control input-md">
+  <input id="textinput" name="degree" type="text" placeholder="example: Bachelor of Science in Computer Science" class="form-control input-md">
     
   </div>
 </div>
@@ -291,7 +291,7 @@ function editEducationMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="selectbasic">Graduation Year</label>
   <div class="col-md-3">
-    <select id="selectbasic" name="selectbasic" class="form-control">
+    <select id="selectbasic" name="gradYear" class="form-control">
       <?php yearSelect() ?>
     </select>
   </div>
@@ -301,7 +301,7 @@ function editEducationMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="button1id"></label>
   <div class="col-md-8">
-    <button id="button1id" name="button1id" class="btn btn-primary">Add</button>
+    <button id="button1id" name="addEducation" class="btn btn-primary">Add</button>
     <button id="button2id" name="button2id" class="btn btn-warning">Cancel</button>
   </div>
 </div>
@@ -374,7 +374,7 @@ function editExperienceMain($currentUser){ ?>
     <div class="row">
         <div class="col-md-1"></div>
             <div class="col-md-10">
-    <form class="form-horizontal">
+    <form class="form-horizontal" role="form" action="profileFunctions.php" method="POST">
 <fieldset>
 
 <form class="form-horizontal">
@@ -387,7 +387,7 @@ function editExperienceMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="textinput">Company</label>  
   <div class="col-md-7">
-  <input id="textinput" name="textinput" type="text" placeholder="example: Google" class="form-control input-md" required="">
+  <input id="textinput" name="company" type="text" placeholder="example: Google" class="form-control input-md" required="">
     
   </div>
 </div>
@@ -396,7 +396,7 @@ function editExperienceMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="textinput">Title</label>  
   <div class="col-md-7">
-  <input id="textinput" name="textinput" type="text" placeholder="example: Software Engineer" class="form-control input-md">
+  <input id="textinput" name="title" type="text" placeholder="example: Software Engineer" class="form-control input-md">
     
   </div>
 </div>
@@ -405,7 +405,7 @@ function editExperienceMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="textarea">Description</label>
   <div class="col-md-7">                     
-    <textarea class="form-control" id="textarea" name="textarea"></textarea>
+    <textarea class="form-control" id="textarea" name="desc"></textarea>
   </div>
 </div>
 
@@ -413,7 +413,7 @@ function editExperienceMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="selectbasic">Starting Month</label>
   <div class="col-md-4">
-    <select id="selectbasic" name="selectbasic" class="form-control">
+    <select id="selectbasic" name="sM" class="form-control">
       <?php monthSelect() ?>
     </select>
   </div>
@@ -423,7 +423,7 @@ function editExperienceMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="selectbasic">Starting Year</label>
   <div class="col-md-4">
-    <select id="selectbasic" name="selectbasic" class="form-control">
+    <select id="selectbasic" name="sY" class="form-control">
       <?php yearSelect() ?>
     </select>
   </div>
@@ -433,7 +433,7 @@ function editExperienceMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="selectbasic">Ending Month</label>
   <div class="col-md-4">
-    <select id="selectbasic" name="selectbasic" class="form-control">
+    <select id="selectbasic" name="eM" class="form-control">
         <option value="0">Present</option>
         <?php monthSelect() ?>
     </select>
@@ -444,7 +444,7 @@ function editExperienceMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="selectbasic">Ending Year</label>
   <div class="col-md-4">
-    <select id="selectbasic" name="selectbasic" class="form-control">
+    <select id="selectbasic" name="eY" class="form-control">
         <option value="0">Present</option>
         <?php yearSelect() ?>
     </select>
