@@ -1,4 +1,6 @@
 <?php
+include "profileFunctions.php";
+
 function profileMain($currentUser){ ?>
 
 
@@ -52,14 +54,14 @@ function profileMain($currentUser){ ?>
                 <div class="panel panel-default">
                 <div class="panel-heading"><strong>Education</strong></div>
                 <div class="panel-body">
-                    Insert Education Here
+                    <?php displayEducation($currentUser) ?>
                 </div>
                 </div>
                 
                 <div class="panel panel-default">
                 <div class="panel-heading"><strong>Experience</strong></div>
                 <div class="panel-body">
-                    Insert Experience Here
+                    <?php displayExperience($currentUser) ?>
                 </div>
                 </div>
 
@@ -362,7 +364,7 @@ function editExperienceMain($currentUser){ ?>
                 <div class="panel panel-default">
                 <div class="panel-heading"><strong>Experience</strong></div>
                 <div class="panel-body">
-                    Insert Experience Here
+                    <?php displayExperience($currentUser) ?>
                 </div>
                 </div>
                 
@@ -434,7 +436,7 @@ function editExperienceMain($currentUser){ ?>
   <label class="col-md-4 control-label" for="selectbasic">Ending Month</label>
   <div class="col-md-4">
     <select id="selectbasic" name="eM" class="form-control">
-        <option value="0">Present</option>
+        <option value="111">Present</option>
         <?php monthSelect() ?>
     </select>
   </div>
@@ -445,7 +447,7 @@ function editExperienceMain($currentUser){ ?>
   <label class="col-md-4 control-label" for="selectbasic">Ending Year</label>
   <div class="col-md-4">
     <select id="selectbasic" name="eY" class="form-control">
-        <option value="0">Present</option>
+        <option value="111">Present</option>
         <?php yearSelect() ?>
     </select>
   </div>
@@ -455,7 +457,7 @@ function editExperienceMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="button1id"></label>
   <div class="col-md-8">
-    <button id="button1id" name="button1id" class="btn btn-primary">Add</button>
+    <button id="button1id" name="addExperience" class="btn btn-primary">Add</button>
     <button id="button2id" name="button2id" class="btn btn-warning">Cancel</button>
   </div>
 </div>

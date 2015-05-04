@@ -19,33 +19,7 @@ if (isset($_SESSION["proConnectUserSession"])) {
     exit;
 }
 
-function createProfile($currentUser){
-    
-    /* START CREATE PROFILE OBJECT */
-    try {
-        $profile = new ParseObject("Profile");
-        $profile->set("User", $currentUser); //pointer profile->user
-        $profile->set("currentPosition", "Software Engineer");
-        $profile->set("currentCompany", "Google");
-        $profile->set("location", "San Francisco Bay Area");
-        $profile->set("state", "CA");
-        $profile->save(true);
-        echo "<br>successfully created profile<br>";//debugging
-    } catch (ParseException $ex) {
-        echo $ex->getMessage().".<br>";
-    }
-    /* END CREATE PROFILE OBJECT */
 
-    /* start pointer user->profile */
-    try {
-        $currentUser->set("Profile", $profile );
-        $currentUser->save(true);
-        echo "successfully created pointer user->profile<br>";//debugging
-    } catch (ParseException $ex) {
-        echo $ex->getMessage().".<br>";
-    }
-    /* end pointer to profile object */
-}
 
 function editProfile($currentUser, $profilePicture, $currentTitle, $currentLocale, $currentState, $summary){
     $currentUser->fetch();
@@ -123,7 +97,28 @@ function addEducation($currentUser, $school, $degree, $gradYear){
     exit;
 } // end of AddEducation
 
-function addExperience($currentUser, $school, $degree, $gradYear){
+function addExperience($currentUser, $company, $title, $desc, $sM, $sY, $eM, $eY){
+	$startDate = new DateTime();
+	$startDate->setDate($sY, $sM, 1);
+
+	$presentDate = new DateTime();
+
+	$endDate = new DateTime();
+
+	if( !($eM == "111" || $eY == "111") ){ // if NOT present
+		$endDate->setDate($eY, $eM, 1);
+	}
+	
+
+	if( $startDate > $endDate ){
+		echo "Error: Starting Date is greater than the Ending Date.";
+		exit;
+	}
+	if( $startDate > $presentDate || $endDate > $presentDate){
+		echo "Error: Starting Date or Ending Date is greater than the Present Date";
+		exit;
+	}
+
     $currentUser->fetch();
     $profile = $currentUser->get("profile");
 
@@ -145,24 +140,67 @@ function addExperience($currentUser, $school, $degree, $gradYear){
 	/* SET PROFILE */
     try {
     	$profile->fetch();
-    	$education = new ParseObject("education");
-    	$education->set("userProfile", $profile);
-    	$education->set("school", $school);
-    	$education->set("degree", $degree);
-    	$education->set("gradYear", $gradYear);
-    	$education->save(true);
+    	$experience = new ParseObject("experience");
+    	$experience->set("userProfile", $profile);
+    	$experience->set("company", $company);
+    	$experience->set("title", $title);
+    	$experience->set("desc", $desc);
+    	$experience->set("sM", rMon($sM) );
+    	$experience->set("sY", $sY);
+    	$experience->set("sortBy", $endDate );
+    	if($endDate == $presentDate){
+    		$experience->set("eM", "Present");
+    		$experience->set("eY", " ");
+    	}else{
+    		$experience->set("eM", rMon($eM) );
+    		$experience->set("eY", $eY);
+    	}
 
-    	$educationList = $profile->getRelation("educationList");
-    	$educationList->add($education);
+    	$interval = $startDate->diff($endDate);
+    	$y = $interval->format('%y');
+    	$m = $interval->format('%m');
+
+    	$diff = ( $y * 12 ) + $m;
+
+    	$experience->set("diffMonths", $diff );
+    	//$experience->set("diffDisplay", diffDisplay($interval) );
+
+    	$experience->save(true);
+
+    	$experienceList = $profile->getRelation("experienceList");
+    	$experienceList->add($experience);
     	$profile->save(true);
 
     } catch (ParseException $ex) {
     	echo $ex->getMessage().".<br>";
     }
-    header("Location: edit_education.php");
+    header("Location: edit_experience.php");
     exit;
 } // end of AddExperience
 
+function rMon($mon){
+	if($mon == "01") return "Jan";
+	if($mon == "02") return "Feb";
+	if($mon == "03") return "Mar";
+	if($mon == "04") return "Apr";
+	if($mon == "05") return "May";
+	if($mon == "06") return "Jun";
+	if($mon == "07") return "Jul";
+	if($mon == "08") return "Aug";
+	if($mon == "09") return "Sep";
+	if($mon == "10") return "Oct";
+	if($mon == "11") return "Nov";
+	if($mon == "12") return "Dec";
+}
+
+function diffDisplay($interval){
+	$m = $interval->format('%m');
+		if($m > 12){
+			return $interval->format('%y Years and %m Months experience');
+		}else{
+			return $interval->format('%m Months experience');
+		}
+}
 
 function createExperience($currentUser, $company, $title, $sM, $sY, $present=false, $eM=0, $eY=0){
 
@@ -205,7 +243,61 @@ function createExperience($currentUser, $company, $title, $sM, $sY, $present=fal
 }
 
 
+function displayExperience($currentUser){
+	$currentUser->fetch();
 
+	$profile = $currentUser->get("profile");
+	$profile->fetch();
+
+	$experienceList = $profile->getRelation("experienceList")->getQuery()->descending("sortBy")->find();
+
+	if($experienceList){
+		foreach($experienceList as $x){
+			$x->fetch();
+			?>
+			<div class="row">
+				<div class="col-md-3">
+					<?php echo $x->get("sM") . " " . $x->get("sY") . " - " . $x->get("eM") . " " . $x->get("eY"); ?>
+				</div>
+				<div class="col-md-9">
+					<?php
+					echo "<b>".$x->get("title") . ", ". $x->get("company")."</b><br>";
+					echo $x->get("desc");
+					?>
+				</div>
+			</div>
+			<?php 
+		}
+	}
+}
+
+function displayEducation($currentUser){
+	$currentUser->fetch();
+
+	$profile = $currentUser->get("profile");
+	$profile->fetch();
+
+	$educationList = $profile->getRelation("educationList")->getQuery()->descending("gradYear")->find();
+
+	if($educationList){
+		foreach($educationList as $x){
+			$x->fetch();
+			?>
+			<div class="row">
+				<div class="col-md-3">
+					<?php echo "Graduated ".$x->get("gradYear"); ?>
+				</div>
+				<div class="col-md-9">
+					<?php
+					echo "<b>".$x->get("degree") ."</b><br>";
+					echo $x->get("school");
+					?>
+				</div>
+			</div>
+			<?php 
+		}
+	}
+}
 
 
 
@@ -241,6 +333,6 @@ if(isset($_POST["addExperience"])) {
 	$eM = $_POST["eM"];
 	$eY = $_POST["eY"];
 
-	addExperience($company, $title, $desc, $sM, $sY, $eM, $eM);
+	addExperience($currentUser, $company, $title, $desc, $sM, $sY, $eM, $eY);
 }
 ?>
