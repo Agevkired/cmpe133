@@ -236,41 +236,6 @@ function displayExperience($currentUser){
 	}
 }
 
-function displayEditExperience($currentUser){
-	$currentUser->fetch();
-
-	$profile = $currentUser->get("profile");
-	if($profile){
-		$profile->fetch();
-
-		$experienceList = $profile->getRelation("experienceList")->getQuery()->descending("sortBy")->find();
-
-		if($experienceList){
-			foreach($experienceList as $x){
-				$x->fetch();
-				?>
-				<div class="row">
-					<div class="col-md-3">
-						<?php echo $x->get("sM") . " " . $x->get("sY") . " - " . $x->get("eM") . " " . $x->get("eY"); ?>
-					</div>
-					<div class="col-md-7">
-						<?php
-						echo "<b>".$x->get("title") . ", ". $x->get("company")."</b><br>";
-						echo $x->get("desc");
-						?>
-					</div>
-					<div class="col-md-2">
-						<button type="button" onclick="parent.location='profileFunctions.php?destroyExperience=<?php echo $x->getObjectId() ?>'" class="btn btn-warning">Remove</button>
-					</div>
-				</div>
-				<?php 
-			}
-		}
-	}else{
-		echo "You need to set your experience.";
-	}
-}
-
 function displayEducation($currentUser){
 	$currentUser->fetch();
 
@@ -328,7 +293,7 @@ function displayEditEducation($currentUser){
 					</div>
 
 					<div class="col-md-2">
-						<button type="button" onclick="parent.location='profileFunctions.php?destroyEducation=<?php echo $x->getObjectId() ?>'" class="btn btn-warning">Remove</button>
+						<?php //echo $x->getObjectId() ?>
 					</div>
 				</div>
 				<?php 
@@ -374,43 +339,32 @@ if(isset($_POST["addExperience"])) {
 
 	addExperience($currentUser, $company, $title, $desc, $sM, $sY, $eM, $eY);
 }
-
-if(isset($_GET["destroyEducation"])) {
-	$id = $_GET["destroyEducation"];
+/*
+if(isset($_POST["destroyEducation"])) {
+	$id = $_POST["destroyEducation"];
 	$query = new ParseQuery("education");
 	try{
 	$education = $query->equalTo("objectId", $id )->first();
+	$education->destroy(true);
 
-	if($education){
-		$education->destroy(true);
-	}
-
-	//header("Location: edit_education.php");
-    //exit;
-	}catch (ParseException $ex) {
-            
-    }
-    header("Location: edit_education.php");
+	header("Location: edit_education.php");
     exit;
+	}catch (ParseException $ex) {
+            echo $ex->getMessage().".<br>";
+        }
 }
 
-if(isset($_GET["destroyExperience"])) {
-	$id = $_GET["destroyExperience"];
+if(isset($_POST["destroyExperience"])) {
+	$id = $_POST["destroyExperience"];
 	$query = new ParseQuery("experience");
 	try{
 	$experience = $query->equalTo("objectId", $id )->first();
+	$experience->destroy(true);
 
-	if($experience){
-		$experience->destroy(true);
-	}
-
-	//header("Location: edit_experience.php");
-    //exit;
-	}catch (ParseException $ex) {
-            
-    }
-    header("Location: edit_experience.php");
+	header("Location: edit_experience.php");
     exit;
-}
-
+	}catch (ParseException $ex) {
+            echo $ex->getMessage().".<br>";
+        }
+}*/
 ?>

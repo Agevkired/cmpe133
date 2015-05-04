@@ -1,7 +1,27 @@
 <?php
 include "profileFunctions.php";
 
-function profileMain($currentUser){ ?>
+function profileMain($currentUser){ 
+
+
+    $profile = $currentUser->get("profile");
+    if($profile){
+        $profile->fetch();
+    }
+
+    $name = $currentUser->get("name");
+    $email = $currentUser->get("email");
+    $summary = "You need to enter a summary.";
+    $currentLocale = "";
+    $currentState = "";
+
+    if($profile){
+        $summary = $profile->get("summary");
+        $currentLocale = $profile->get("currentLocale");
+        $currentState = $profile->get("currentState");
+    }   
+    
+    ?>
 
 
     <div class="row">
@@ -20,8 +40,12 @@ function profileMain($currentUser){ ?>
                 <div class="profile-usertitle">
 
                     <div>
-                    <h4><?php echo $currentUser->get("name") ?></br><small><?php echo $currentUser->get("email") ?></small></h4>
-                    Bay Area, CA
+                    <h4><?php echo $name ?></br><small><?php echo $email ?></small></h4>
+                    <?php
+                    if($currentLocale && $currentState){
+                     echo $currentLocale. ", " . $currentState;
+                    }
+                      ?>
                     </div>
                     <br>
                 </div>
@@ -47,7 +71,7 @@ function profileMain($currentUser){ ?>
                 <div class="panel panel-default">
                 <div class="panel-heading"><strong>Summary</strong></div>
                 <div class="panel-body">
-                    Insert Summary Here
+                    <?php echo nl2br($summary) ?>
                 </div>
                 </div>
 
@@ -68,7 +92,7 @@ function profileMain($currentUser){ ?>
                 <div class="panel panel-default">
                 <div class="panel-heading"><strong>Connections</strong></div>
                 <div class="panel-body">
-                    Display Connections Here
+                    
                 </div>
                 </div>
                 
@@ -79,7 +103,28 @@ function profileMain($currentUser){ ?>
 <?php
 } // profileMain
 
-function editProfileMain($currentUser){ ?>
+function editProfileMain($currentUser){ 
+    $currentUser->fetch();
+    $profile = $currentUser->get("profile");
+    if($profile){
+        $profile->fetch();
+    }
+
+    $name = $currentUser->get("name");
+    $email = $currentUser->get("email");
+    $summary = "You need to enter a summary.";
+    $currentLocale = "";
+    $currentState = "";
+    $currentTitle = "";
+
+    if($profile){
+        $summary = $profile->get("summary");
+        $currentState = $profile->get("currentState");
+        $currentLocale = $profile->get("currentLocale");
+        $currentTitle = $profile->get("currentTitle");
+    }   
+    
+    ?>
 
 
     <div class="row">
@@ -98,8 +143,12 @@ function editProfileMain($currentUser){ ?>
                 <div class="profile-usertitle">
 
                     <div>
-                    <h4><?php echo $currentUser->get("name") ?></br><small><?php echo $currentUser->get("email") ?></small></h4>
-                    Bay Area, CA
+                    <h4><?php echo $name ?></br><small><?php echo $email ?></small></h4>
+                    <?php
+                    if($currentLocale && $currentState){
+                     echo $currentLocale. ", " . $currentState;
+                    }
+                      ?>
                     </div>
                     <br>
                 </div>
@@ -140,7 +189,7 @@ function editProfileMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="textinput">Current Title</label>  
   <div class="col-md-6">
-  <input id="textinput" name="currentTitle" type="text" placeholder="example: Student" class="form-control input-md" required="">
+  <input id="textinput" name="currentTitle" type="text" placeholder="example: Student" class="form-control input-md" value="<?php echo $currentTitle ?>" required>
     
   </div>
 </div>
@@ -149,7 +198,7 @@ function editProfileMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="textinput">Current Locale</label>  
   <div class="col-md-6">
-  <input id="textinput" name="currentLocale" type="text" placeholder="example: SF Bay Area" class="form-control input-md">
+  <input id="textinput" name="currentLocale" type="text" placeholder="example: SF Bay Area" class="form-control input-md" value="<?php echo $currentLocale ?>" required>
     
   </div>
 </div>
@@ -168,7 +217,7 @@ function editProfileMain($currentUser){ ?>
 <div class="form-group">
   <label class="col-md-4 control-label" for="textarea">Summary</label>
   <div class="col-md-7">                     
-    <textarea class="form-control" id="textarea" name="summary" required></textarea>
+    <textarea class="form-control" id="textarea" name="summary" required><?php  //echo htmlentities($summary) ?></textarea>
   </div>
 </div>
 
@@ -208,7 +257,27 @@ function editProfileMain($currentUser){ ?>
 <?php
 } // profileMain
 
-function editEducationMain($currentUser){ ?>
+function editEducationMain($currentUser){ 
+    $currentUser->fetch();
+    $profile = $currentUser->get("profile");
+    if($profile){
+        $profile->fetch();
+    }
+
+    $name = $currentUser->get("name");
+    $email = $currentUser->get("email");
+    $summary = "You need to enter a summary.";
+    $currentLocale = "";
+    $currentState = "";
+
+    if($profile){
+
+        $currentLocale = $profile->get("currentLocale");
+        $currentState = $profile->get("currentState");
+    }   
+    
+    ?>
+
 
     <div class="row">
     <div class="row profile">
@@ -226,8 +295,12 @@ function editEducationMain($currentUser){ ?>
                 <div class="profile-usertitle">
 
                     <div>
-                    <h4><?php echo $currentUser->get("name") ?></br><small><?php echo $currentUser->get("email") ?></small></h4>
-                    Bay Area, CA
+                    <h4><?php echo $name ?></br><small><?php echo $email ?></small></h4>
+                    <?php
+                    if($currentLocale && $currentState){
+                     echo $currentLocale. ", " . $currentState;
+                    }
+                      ?>
                     </div>
                     <br>
                 </div>
@@ -253,7 +326,7 @@ function editEducationMain($currentUser){ ?>
                 <div class="panel panel-default">
                 <div class="panel-heading"><strong>Education</strong></div>
                 <div class="panel-body">
-                    Insert Education Here
+                    <?php displayEditEducation($currentUser) ?>
                 </div>
                 </div>
                 
@@ -319,7 +392,27 @@ function editEducationMain($currentUser){ ?>
 } // editEducationMain
 
 
-function editExperienceMain($currentUser){ ?>
+function editExperienceMain($currentUser){ 
+    $currentUser->fetch();
+    $profile = $currentUser->get("profile");
+    if($profile){
+        $profile->fetch();
+    }
+
+    $name = $currentUser->get("name");
+    $email = $currentUser->get("email");
+
+    $currentLocale = "";
+    $currentState = "";
+
+    if($profile){
+        $summary = $profile->get("summary");
+        $currentLocale = $profile->get("currentLocale");
+        $currentState = $profile->get("currentState");
+    }   
+    
+    ?>
+
 
     <div class="row">
     <div class="row profile">
@@ -337,8 +430,12 @@ function editExperienceMain($currentUser){ ?>
                 <div class="profile-usertitle">
 
                     <div>
-                    <h4><?php echo $currentUser->get("name") ?></br><small><?php echo $currentUser->get("email") ?></small></h4>
-                    Bay Area, CA
+                    <h4><?php echo $name ?></br><small><?php echo $email ?></small></h4>
+                    <?php
+                    if($currentLocale && $currentState){
+                     echo $currentLocale. ", " . $currentState;
+                    }
+                      ?>
                     </div>
                     <br>
                 </div>
@@ -364,7 +461,7 @@ function editExperienceMain($currentUser){ ?>
                 <div class="panel panel-default">
                 <div class="panel-heading"><strong>Experience</strong></div>
                 <div class="panel-body">
-                    <?php displayExperience($currentUser) ?>
+                    <?php displayEditExperience($currentUser) ?>
                 </div>
                 </div>
                 
