@@ -18,39 +18,45 @@
                 if($forumRoot){
                     $_SESSION['fid'] = $forumRootObjectId;
                     $forumRoot->fetch();
-
+                    $forumPostsArray = $forumRoot->get("forumPost");
+                    $c = count($forumPostsArray);
+                    if($c == 1){
+                        $c = $c." Post";
+                    }else{
+                        $c = $c." Posts";
+                    }
                     ?>
         <!--Forum Display Start -->
             <div class="row">
             	<div class="col-md-1"></div> 
                 <div class="col-md-10">
                   <div class="page-header">
-                  <h1><small class="pull-right"># comments here</small><?php echo $forumRoot->get("title") ?></h1>
+                  <h1><small class="pull-right"><?php echo $c ?></small><?php echo $forumRoot->get("title") ?></h1>
                   </div> 
                   <div class="comments-list">
               <?php 
 
 
 
-                    $forumPostsArray = $forumRoot->get("forumPost");
+                    //$forumPostsArray = $forumRoot->get("forumPost");
                     foreach($forumPostsArray as $forumPost){
                         $forumPost->fetch();
                         $createdBy = $forumPost->get("createdBy");
                         $createdBy->fetch();
-
+                        $dat = $forumPost->getCreatedAt()->format('M d,Y, g:ia') ." UTC";
                         //echo $createdBy->get("name") . ": " .  $forumPost->get("content") . "<br>";
                         ?>
                        <div class="media">
-                           <p class="pull-right"><small>date_posted_goes_here</small></p>
+                           <p class="pull-right"><small><?php echo $dat ?></small></p>
                             <a class="media-left" href="#">
-                              <img src="http://lorempixel.com/40/40/people/1/">
+                              <img src="img/profile-photo-small.jpg">
                             </a>
                            	<div class="media-body">
                                 
                               <h4 class="media-heading user_name"><?php echo $createdBy->get("name") ?></h4>
                               <?php echo $forumPost->get("content") ?>
                               
-                              <p><small><a href="">Blank</a> - <a href="">Blank</a></small></p>
+                              <!--<p><small><a href="">Blank</a> - <a href="">Blank</a></small></p>-->
                             </div>
                           </div>
                         <?php

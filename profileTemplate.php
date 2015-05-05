@@ -92,7 +92,100 @@ function profileMain($currentUser){
                 <div class="panel panel-default">
                 <div class="panel-heading"><strong>Connections</strong></div>
                 <div class="panel-body">
-                    
+                    <?php displayProfileConnections($currentUser) ?>
+                </div>
+                </div>
+                
+            </div>
+        </div>  
+    </div>
+
+<?php
+} // profileMain
+
+function viewProfileMain($profile){ 
+    $current = $profile->get("user");
+    $current->fetch();
+
+    $profile = $profile;
+    if($profile){
+        $profile->fetch();
+    }
+
+    $name = $profile->get("name");
+    $email = $profile->get("email");
+    $summary = "You need to enter a summary.";
+    $currentLocale = "";
+    $currentState = "";
+
+    if($profile){
+        $summary = $profile->get("summary");
+        $currentLocale = $profile->get("currentLocale");
+        $currentState = $profile->get("currentState");
+    }   
+    
+    ?>
+
+
+    <div class="row">
+    <div class="row profile">
+        <div class="col-md-12">
+            <div class="profile-sidebar">
+                <!-- SIDEBAR USERPIC -->
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                <div class="profile-userpic">
+                    <img src="img/profile-photo.jpg" class="img-responsive" alt="">
+                </div>
+
+                <!-- END SIDEBAR USERPIC -->
+                <!-- SIDEBAR USER TITLE -->
+                <div class="profile-usertitle">
+
+                    <div>
+                    <h4><?php echo $name ?></br><small><?php echo $email ?></small></h4>
+                    <?php
+                    if($currentLocale && $currentState){
+                     echo $currentLocale. ", " . $currentState;
+                    }
+                      ?>
+                    </div>
+                    <br>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1"></div>
+            <div class="col-md-10">
+  
+                <div class="panel panel-default">
+                <div class="panel-heading"><strong>Summary</strong></div>
+                <div class="panel-body">
+                    <?php echo nl2br($summary) ?>
+                </div>
+                </div>
+
+                <div class="panel panel-default">
+                <div class="panel-heading"><strong>Education</strong></div>
+                <div class="panel-body">
+                    <?php displayEducation($current) ?>
+                </div>
+                </div>
+                
+                <div class="panel panel-default">
+                <div class="panel-heading"><strong>Experience</strong></div>
+                <div class="panel-body">
+                    <?php displayExperience($current) ?>
+                </div>
+                </div>
+
+                <div class="panel panel-default">
+                <div class="panel-heading"><strong>Connections</strong></div>
+                <div class="panel-body">
+                    <?php displayProfileConnectionsView($current)//displayProfileConnections($current) ?>
                 </div>
                 </div>
                 
@@ -377,7 +470,7 @@ function editEducationMain($currentUser){
   <label class="col-md-4 control-label" for="button1id"></label>
   <div class="col-md-8">
     <button id="button1id" name="addEducation" class="btn btn-primary">Add</button>
-    <button id="button2id" name="button2id" class="btn btn-warning">Cancel</button>
+    <button id="button2id" onclick="parent.location='profile.php'" name="button2id" class="btn btn-warning">Cancel</button>
   </div>
 </div>
 
@@ -555,7 +648,7 @@ function editExperienceMain($currentUser){
   <label class="col-md-4 control-label" for="button1id"></label>
   <div class="col-md-8">
     <button id="button1id" name="addExperience" class="btn btn-primary">Add</button>
-    <button id="button2id" name="button2id" class="btn btn-warning">Cancel</button>
+    <button id="button2id" onclick="parent.location='profile.php'" name="button2id" class="btn btn-warning">Cancel</button>
   </div>
 </div>
 

@@ -1,0 +1,91 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Payment! ProConnect</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="screen.css" rel="stylesheet">
+
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script> 
+	$(function(){
+	  $("#header").load("profile_header.html"); 
+	  $("#footer").load("footer.html"); 
+	});
+	</script> 
+</head>
+<body>
+
+<!-- START OF HEADER-->
+<div id="header"></div>
+<!-- END OF HEADER-->
+
+<!-- Content of the page-->
+<div class="wrapper">
+<legend class="text-center header" style="text-shadow: 2px 2px #A8A8A8;font-style: italic;"><h1>What would you receive with your Pro Account?</h1></legend>
+<div class="container">
+  <div class="list-group">
+    <a class="list-group-item active">
+      Grow and nurture your network</a>
+    <a class="list-group-item">Advanced Search</a>  
+    <a class="list-group-item">Ehance your professional brand</a>
+    <a class="list-group-item">Promote and grow your business</a>
+    <a class="list-group-item">Maximize the power of your network</a>
+  </div>
+</div>
+<div class="container" >
+  <p>You'll pay US$99.99/year</p>
+  <p>From now you can find the right people to connect with.</p>
+  <p> Pay with payPal:</p>
+
+  <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+  <!-- Business info so that we can collect the payments-->
+  <input type="hidden" name="business" value="lizzywizzy00@yahoo.com">
+
+  <!-- Buy now button-->
+  <input type="hidden" name="cmd" value="_xclick">
+
+  <!--  Details about the item that the buyers will purchase-->
+  <input type="hidden" name="item_name" value="Premium user fee">
+  <input type="hidden" name="amount" value="1">
+  <input type="hidden" name="currency_code" value="USD">
+
+  <!-- What page will be return after coming back from paypal-->
+  <input type="hidden" name="return" value="http://localhost/software_eng_2/paypal_success.php">
+  <input type="hidden" name="cancel_return" value="http://localhost/software_eng_2/paypal_cancel.php">
+
+  <!-- Display the payment button-->
+  <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" name="submit"
+  alt="PayPal - The safer, easier way to pay online" style="margin-right:7px;">
+  </form>
+</div>
+
+<div class="jumbotron">
+<div class ="container">
+  <img src="http://www.mortgagecalculator.org/images/time-is-money.gif" class="pull-right">
+  
+<p>No matter who you're looking for, Premium search filters can help you find the right people faster.</p>
+<p>Your day with ProConnect Premium starts here</p>
+</div>
+</div>
+
+    <div class="push"></div>
+ </div>
+ <!-- END OF CONTENT-->
+
+<!-- START OF FOOTER -->
+ <div id="footer"></div>
+<!-- END OF FOOTER -->
+
+<!-- Adding the Background -->
+<style>
+body{
+   background: #F8F8F8;  
+  }
+</style>
+
+
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -15,10 +15,28 @@ function printfn($result){
 
         	$user = $query->equalTo("objectId", $id)->first();
  
-			echo $user->get("name")." ".$id."<br>";
+        $name = $user->get("name");
+        $email = $user->get("email");
+        $title = $user->get("currentTitle");
+        $location = $user->get("currentLocale").", ".$user->get("currentState");
+
+      ?>
+          <div class="row">
+            <div class="col-md-5">
+                <h4><?php echo $name ?></br><small><?php echo $email ?></h4>
+                <!--<div class="profile-usertitle-name">Tomas Verga</div>
+                <div class="profile-usertitle-job">vergaGrande12@yahoo.com</div>-->
+            </div>
+            <div class="col-md-4">
+                <h4><?php echo $title ?></br><small><?php echo $location ?></small></h4>
+            </div>
+            <div class="col-md-3">
+                <button type="button" onclick="parent.location='view_profile.php?code=<?php echo $id ?>'" class="btn btn-primary">View Profile</button>
+            </div>
+        </div>
+                <?php
 		}
 	}
-
 }
 
 function premiumMain($currentUser, $results){
@@ -147,7 +165,7 @@ function premiumMain($currentUser, $results){
   <label class="col-md-4 control-label" for="state">State</label>
   <div class="col-md-4">
     <select id="state" name="state" class="form-control">
-      <option value="CA">California</option>
+      <?php echo stateOptionPrint() ?>
     </select>
   </div>
 </div>
@@ -156,7 +174,7 @@ function premiumMain($currentUser, $results){
 <div class="form-group">
   <label class="col-md-4 control-label" for="premiumSearch"></label>
   <div class="col-md-4">
-    <button id="premiumSearch" name="premiumSearch" class="btn btn-inverse">Search Connections</button>
+    <button id="premiumSearch" name="premiumSearch" class="btn btn-primary">Search Connections</button>
   </div>
 </div>
 
@@ -171,6 +189,59 @@ function premiumMain($currentUser, $results){
 <?php
 } // end of premiumMain
 
-
+function stateOptionPrint(){ ?>
+    <option value="AL">Alabama</option>
+    <option value="AK">Alaska</option>
+    <option value="AZ">Arizona</option>
+    <option value="AR">Arkansas</option>
+    <option value="CA">California</option>
+    <option value="CO">Colorado</option>
+    <option value="CT">Connecticut</option>
+    <option value="DE">Delaware</option>
+    <option value="DC">District Of Columbia</option>
+    <option value="FL">Florida</option>
+    <option value="GA">Georgia</option>
+    <option value="HI">Hawaii</option>
+    <option value="ID">Idaho</option>
+    <option value="IL">Illinois</option>
+    <option value="IN">Indiana</option>
+    <option value="IA">Iowa</option>
+    <option value="KS">Kansas</option>
+    <option value="KY">Kentucky</option>
+    <option value="LA">Louisiana</option>
+    <option value="ME">Maine</option>
+    <option value="MD">Maryland</option>
+    <option value="MA">Massachusetts</option>
+    <option value="MI">Michigan</option>
+    <option value="MN">Minnesota</option>
+    <option value="MS">Mississippi</option>
+    <option value="MO">Missouri</option>
+    <option value="MT">Montana</option>
+    <option value="NE">Nebraska</option>
+    <option value="NV">Nevada</option>
+    <option value="NH">New Hampshire</option>
+    <option value="NJ">New Jersey</option>
+    <option value="NM">New Mexico</option>
+    <option value="NY">New York</option>
+    <option value="NC">North Carolina</option>
+    <option value="ND">North Dakota</option>
+    <option value="OH">Ohio</option>
+    <option value="OK">Oklahoma</option>
+    <option value="OR">Oregon</option>
+    <option value="PA">Pennsylvania</option>
+    <option value="RI">Rhode Island</option>
+    <option value="SC">South Carolina</option>
+    <option value="SD">South Dakota</option>
+    <option value="TN">Tennessee</option>
+    <option value="TX">Texas</option>
+    <option value="UT">Utah</option>
+    <option value="VT">Vermont</option>
+    <option value="VA">Virginia</option>
+    <option value="WA">Washington</option>
+    <option value="WV">West Virginia</option>
+    <option value="WI">Wisconsin</option>
+    <option value="WY">Wyoming</option>
+<?php 
+} // end of stateOptionPrint
 
 ?>

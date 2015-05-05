@@ -338,7 +338,106 @@ function displayEditEducation($currentUser){
 		echo "You need to set your education.";
 	}
 }
+function displayProfileConnectionsView($currentUser){
 
+    try{
+
+        $currentUserConnections =  $currentUser->getRelation("connections")->getQuery()->find();
+        
+        //echo "<br>START of CONNECTIONS<br><br>";
+        //echo "Connections: " .count($currentUserConnections). "<br>";
+
+        if($currentUserConnections){
+            foreach($currentUserConnections as $friend){
+                $friend->fetch();
+                //echo var_dump($friend);
+
+                $profile = $friend->get("profile");
+
+                $title = "";
+                $location = "";
+                if($profile){
+                    $profile->fetch();
+                    $name = $profile->get("name");
+               		$email = $profile->get("email");
+                    $title = $profile->get("currentTitle");
+                    $location = $profile->get("currentLocale").", ".$profile->get("currentState");
+                    $id = $profile->getObjectId();
+                    ?>
+                <div class="row">
+                
+                    <div class="col-md-5">
+                        <h4><?php echo $name ?></br><small><?php echo $email ?></h4>
+                        <!--<div class="profile-usertitle-name">Tomas Verga</div>
+                        <div class="profile-usertitle-job">vergaGrande12@yahoo.com</div>-->
+                    </div>
+                    <div class="col-md-4">
+                        <h4><?php echo $title ?></br><small><?php echo $location ?></small></h4>
+                    </div>
+            <div class="col-md-3">
+                <button type="button" onclick="parent.location='view_profile.php?code=<?php echo $id ?>'" class="btn btn-primary">View Profile</button>
+            </div>
+                </div>
+                <?php
+
+                }
+
+            }
+        }
+
+    } catch (ParseException $ex) {
+        echo $ex->getMessage().".<br>";
+    }
+}
+
+function displayProfileConnections($currentUser){
+
+    try{
+
+        $currentUserConnections =  $currentUser->getRelation("connections")->getQuery()->find();
+        
+        //echo "<br>START of CONNECTIONS<br><br>";
+        //echo "Connections: " .count($currentUserConnections). "<br>";
+
+        if($currentUserConnections){
+            foreach($currentUserConnections as $friend){
+                $friend->fetch();
+                //echo var_dump($friend);
+
+                $profile = $friend->get("profile");
+
+                $title = "";
+                $location = "";
+                if($profile){
+                    $profile->fetch();
+                    $name = $profile->get("name");
+               		$email = $profile->get("email");
+                    $title = $profile->get("currentTitle");
+                    $location = $profile->get("currentLocale").", ".$profile->get("currentState");
+                    ?>
+                <div class="row">
+                	<div class="col-md-2"></div>
+                    <div class="col-md-5">
+                        <h4><?php echo $name ?></br><small><?php echo $email ?></h4>
+                        <!--<div class="profile-usertitle-name">Tomas Verga</div>
+                        <div class="profile-usertitle-job">vergaGrande12@yahoo.com</div>-->
+                    </div>
+                    <div class="col-md-5">
+                        <h4><?php echo $title ?></br><small><?php echo $location ?></small></h4>
+                    </div>
+
+                </div>
+                <?php
+
+                }
+
+            }
+        }
+
+    } catch (ParseException $ex) {
+        echo $ex->getMessage().".<br>";
+    }
+}
 
 // EDIT PROFILE FUNCTION
 if(isset($_POST["editProfile"])) {

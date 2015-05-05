@@ -51,13 +51,15 @@ function createConnectionRequest( $currentUser, $friendsId ){
     $currentUser->fetch();
     if($currentUser->getObjectId() == $friend->getObjectId()){
         echo "You can't connect to yourself silly.<br>";
+        header( "refresh:4;url=view_connections.php" );
         return;
     }
 
 
     $alreadyConnected = $currentUser->getRelation("connections")->getQuery()->equalTo("objectId", $friendsId )->first();
     if($alreadyConnected){
-        echo "Your already connected to <br>".$friend->get("name")."<br>";
+        echo "Your already connected to <br><b>".$friend->get("name")."</b><br>";
+        header( "refresh:4;url=view_connections.php" );
         return;
     }
 
@@ -83,13 +85,15 @@ function createConnectionRequest( $currentUser, $friendsId ){
             $connectionRequest->set("toUser", $friend);
             // user2Accepts is left undefined until user2 accepts or denys
             $connectionRequest->save(true);
-            echo "Connection request sent to <br>". $friend->get("name").".<br>";
+            echo "Connection request sent to <br><b>". $friend->get("name")."</b><br>";
+            header( "refresh:4;url=view_connections.php" );
 
         } catch (ParseException $ex) {
             echo $ex->getMessage().".<br>";
         }
     }else{
-        echo "You currently have a pending connection request with ". $friend->get("name").".<br>";
+        echo "You currently have a pending connection request with<br><b>". $friend->get("name")."</b><br>";
+        header( "refresh:4;url=view_connections.php" );
     }
     
     /* END OF CONNECTION REQUEST */
@@ -129,7 +133,7 @@ function seeConnectionRequest($currentUser){
         ?>                  
         <div class="row">
             <div class="col-md-6">
-                <h4><?php echo $name ?></br><small><?php echo $email ?></h4>
+                <h4><?php echo $name ?></br><small><?php echo $email ?></small></h4>
                 <!--<div class="profile-usertitle-name">Tomas Verga</div>
                 <div class="profile-usertitle-job">vergaGrande12@yahoo.com</div>-->
             </div>
@@ -164,7 +168,7 @@ function seeConnectionRequest($currentUser){
         ?>                  
         <div class="row">
             <div class="col-md-6">
-                <h4><?php echo $name ?></br><small><?php echo $email ?></h4>
+                <h4><?php echo $name ?></br><small><?php echo $email ?></small></h4>
                 <!--<div class="profile-usertitle-name">Tomas Verga</div>
                 <div class="profile-usertitle-job">vergaGrande12@yahoo.com</div>-->
             </div>

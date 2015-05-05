@@ -34,7 +34,8 @@
     session_unset();
     session_destroy();
 
-    
+    header("Location: index.php");
+    exit;
     if (!$username) {
     	$logoutMsg = "No user currently logged in.";
     }else{

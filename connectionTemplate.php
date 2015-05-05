@@ -5,6 +5,7 @@ use Parse\ParseUser;
 use Parse\ParseException;
 use Parse\ParseRelation;
 
+
 function connectionsMain($currentUser){?>
 				<!-- Content of the page-->
 				<div class="row">

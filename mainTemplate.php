@@ -1,5 +1,23 @@
 <?php
+require 'auth.php';
 
+use Parse\ParseObject;
+use Parse\ParseQuery;
+use Parse\ParseUser;
+use Parse\ParseException;
+
+ob_start(); 
+if (!session_id()) session_start();
+
+$currentUser = "";
+if (isset($_SESSION["proConnectUserSession"])) {
+    $currentUser = $_SESSION["proConnectUserSession"];
+    $currentUser->fetch();
+}else{
+	echo "User not authenticated.";
+    header( "refresh:3;url=index.php" );
+    exit;
+}
 
 function sideMenuAndStartMainDisplay( $name ){
 ?>
@@ -18,16 +36,10 @@ function sideMenuAndStartMainDisplay( $name ){
 						<?php echo $name ?>
 					</div>
 					<div class="profile-usertitle-job">
-						Current Title
+						<?php echo $_SESSION["proConnectUserSession"]->get("email") ?>
 					</div>
 				</div>
 				<!-- END SIDEBAR USER TITLE -->
-				<!-- SIDEBAR BUTTONS -->
-				<div class="profile-userbuttons">
-					<button type="button" class="btn btn-success btn-sm">Follow</button>
-					<button type="button" class="btn btn-danger btn-sm">Message</button>
-				</div>
-				<!-- END SIDEBAR BUTTONS -->
 				<!-- SIDEBAR MENU -->
 				<div class="profile-usermenu">
 					<ul class="nav">
@@ -36,13 +48,6 @@ function sideMenuAndStartMainDisplay( $name ){
 							<a href="profile.php">
 							<i class="glyphicon glyphicon-user"></i>
 							My Profile </a>
-						</li>
-						<li>
-							<a href="premium_search_connections.php">
-							<i class="glyphicon glyphicon-search"></i>
-							Premium Search </a>
-							<!--<i class="glyphicon glyphicon-home"></i>
-							Home </a>-->
 						</li>
 						<li>
 							<a href="view_forum.php">
@@ -54,6 +59,20 @@ function sideMenuAndStartMainDisplay( $name ){
 							<i class="glyphicon glyphicon-link"></i>
 							Connections </a>
 						</li>
+						<?php 
+							    $currentUser = $_SESSION["proConnectUserSession"];
+    							$currentUser->fetch();
+    							$premium = $currentUser->get("premium");
+    							if($premium){
+    								?>
+						<li>
+							<a href="premium_search_connections.php">
+							<i class="glyphicon glyphicon-search"></i>
+							Premium Search </a>
+						</li>
+								<?php
+    							}
+						?>
 					</ul>
 				</div>
 				<!-- END MENU -->

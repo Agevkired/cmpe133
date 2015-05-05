@@ -79,7 +79,7 @@
     <?php echo $resetError//PRINTS PARSE AUTH ERROR?>
     <?php echo $resetSuccess//PRINTS PARSE AUTH ERROR?>
   </div>
-  <button type="submit" name="proConnectReset" class="btn btn-default">Sign In</button><br><br>
+  <button type="submit" name="proConnectReset" class="btn btn-default">Reset</button><br><br>
   Not a member?<a href="register.php">Join Now</a>
 </div>
 
