@@ -1,9 +1,14 @@
 <?php
+require 'auth.php';
+
 use Parse\ParseObject;
 use Parse\ParseQuery;
 use Parse\ParseUser;
 use Parse\ParseException;
 use Parse\ParseRelation;
+
+ob_start(); 
+if (!session_id()) session_start();
 
 function createProfile($currentUser){
     
@@ -44,6 +49,18 @@ function createConnectionRequest( $currentUser, $friendsId ){
 
     $checkConnectionRequest = new ParseQuery("connectionRequest");
     $currentUser->fetch();
+    if($currentUser->getObjectId() == $friend->getObjectId()){
+        echo "You can't connect to yourself silly.<br>";
+        return;
+    }
+
+
+    $alreadyConnected = $currentUser->getRelation("connections")->getQuery()->equalTo("objectId", $friendsId )->first();
+    if($alreadyConnected){
+        echo "Your already connected to <br>".$friend->get("name")."<br>";
+        return;
+    }
+
     $checkConnectionRequest = $checkConnectionRequest->equalTo("fromUser", $currentUser )->equalTo("toUser", $friend );
 
     /* END OF FINDING CONNECTION */
@@ -66,7 +83,7 @@ function createConnectionRequest( $currentUser, $friendsId ){
             $connectionRequest->set("toUser", $friend);
             // user2Accepts is left undefined until user2 accepts or denys
             $connectionRequest->save(true);
-            echo "You have sent a connection request to ". $friend->get("name").".<br>";
+            echo "Connection request sent to <br>". $friend->get("name").".<br>";
 
         } catch (ParseException $ex) {
             echo $ex->getMessage().".<br>";
@@ -79,43 +96,96 @@ function createConnectionRequest( $currentUser, $friendsId ){
 
 }
 
+
+
+
+
 function seeConnectionRequest($currentUser){
-    echo "<br>START of seeConnectionRequest<br><br>"; //debugging
+    
+    /* START OF REQUESTED ME */
+        
+    $queryReqMe = new ParseQuery("connectionRequest");
+    $currentUser->fetch();
+    $queryReqMe->equalTo("toUser", $currentUser );
+    $results = $queryReqMe->find();
+    //echo "People who requested me: " .count($results). "<br>";
+?>
+    <div class="row">
+        <div class="col-md-1"></div>
+            <div class="col-md-10">
+
+                <div class="panel panel-default">
+                <div class="panel-heading"><strong>Pending Connections</strong></div>
+                <div class="panel-body">
+<?php
+    foreach($results as $connectionRequest){
+        $friend = $connectionRequest->get("fromUser");
+        $friend->fetch();
+
+        $name = $friend->get("name");
+        $email = $friend->get("email");
+
+
+        ?>                  
+        <div class="row">
+            <div class="col-md-6">
+                <h4><?php echo $name ?></br><small><?php echo $email ?></h4>
+                <!--<div class="profile-usertitle-name">Tomas Verga</div>
+                <div class="profile-usertitle-job">vergaGrande12@yahoo.com</div>-->
+            </div>
+            <div class="col-md-3">
+                <button type="button" onclick="parent.location='connectionFunctions.php?acceptRequest=<?php echo $connectionRequest->getObjectId() ?>'" class="btn btn-primary">Accept Request</button>
+            </div>
+            <div class="col-md-3">
+                <button type="button" onclick="parent.location='connectionFunctions.php?denyRequest=<?php echo $connectionRequest->getObjectId() ?>'" class="btn btn-inverse">Deny Request</button>
+            </div>
+        </div> 
+        <?php
+    }
+
+    /* END OF REQUESTED ME */
+
 
     /* START OF SEE CONNECTION USER REQUESTED */
     $queryIreq = new ParseQuery("connectionRequest");
     $currentUser->fetch();
     $queryIreq->equalTo("fromUser", $currentUser );
     $results = $queryIreq->find();
-    echo "People I requested: " .count($results). "<br>";
+    //echo "People I requested: " .count($results). "<br>";
     foreach($results as $connectionRequest){
         $friend = $connectionRequest->get("toUser");
         $friend->fetch();
-        echo $friend->get("name").", ".$friend->get("email")."<br>";
+
+        //$fNameAndEmail = "<b>".$friend->get("name")."</b>, ".$friend->get("email");
+        $name = $friend->get("name");
+        $email = $friend->get("email");
+
+
+        ?>                  
+        <div class="row">
+            <div class="col-md-6">
+                <h4><?php echo $name ?></br><small><?php echo $email ?></h4>
+                <!--<div class="profile-usertitle-name">Tomas Verga</div>
+                <div class="profile-usertitle-job">vergaGrande12@yahoo.com</div>-->
+            </div>
+            <div class="col-md-3">
+                <button type="button"  class="btn btn-default">Request Sent</button>
+            </div>
+            <div class="col-md-3">
+                <button type="button" onclick="parent.location='connectionFunctions.php?denyRequest=<?php echo $connectionRequest->getObjectId() ?>'" class="btn btn-inverse">Deny Request</button>
+            </div>
+        </div>        
+        <?php
         
     }
     /* END OF SEE CONNECTION USER REQUESTED */
+?>
+                </div>
+                </div>
+                
 
-
-    /* START OF SEE CONNECTION USER REQUESTED */
-        
-    $queryReqMe = new ParseQuery("connectionRequest");
-    $currentUser->fetch();
-    $queryReqMe->equalTo("toUser", $currentUser );
-    $results = $queryReqMe->find();
-    echo "People who requested me: " .count($results). "<br>";
-    foreach($results as $connectionRequest){
-        $friend = $connectionRequest->get("fromUser");
-        $friend->fetch();
-        echo $friend->get("name").", ".$friend->get("email");
-        acceptConnectionRequest( $connectionRequest );// testing
-    }
-
-    /* END OF SEE CONNECTION USER REQUESTED */
-    echo "<br>END of seeConnectionRequest<br>"; //debugging
-
-
-}
+<?php
+}//end of seeConnectionRequest
 
 function acceptConnectionRequest($connectionRequestObject){
 
@@ -153,22 +223,61 @@ function displayConnections($currentUser){
     try{
 
         $currentUserConnections =  $currentUser->getRelation("connections")->getQuery()->find();
-        //echo var_dump($currentUserConnections);
-        echo "<br>START of CONNECTIONS<br><br>";
-        echo "Connections: " .count($currentUserConnections). "<br>";
+        
+        //echo "<br>START of CONNECTIONS<br><br>";
+        //echo "Connections: " .count($currentUserConnections). "<br>";
+        ?>
+
+                <div class="panel panel-default">
+                <div class="panel-heading"><strong>Connections</strong></div>
+                <div class="panel-body">
+        <?php
+
         if($currentUserConnections){
             foreach($currentUserConnections as $friend){
                 $friend->fetch();
                 //echo var_dump($friend);
-                echo $friend->get("name").", ".$friend->get("email")."<br>";
-                //$friendProfile = $friend->get("Profile");
-                //$friendProfile->fetch();
-                //echo $friendProfile->get("currentPosition").", ";
-                //echo $friendProfile->get("city").", ";
-                //echo $friendProfile->get("state")."<br>";
+                $name = $friend->get("name");
+                $email = $friend->get("email");
+
+                $profile = $friend->get("profile");
+
+                $title = "";
+                $location = "";
+                if($profile){
+                    $profile->fetch();
+                    $title = $profile->get("currentTitle");
+                    $location = $profile->get("currentLocale").", ".$profile->get("currentState");
+                }
+
+                ?>
+                <div class="row">
+                    <div class="col-md-5">
+                        <h4><?php echo $name ?></br><small><?php echo $email ?></h4>
+                        <!--<div class="profile-usertitle-name">Tomas Verga</div>
+                        <div class="profile-usertitle-job">vergaGrande12@yahoo.com</div>-->
+                    </div>
+                    <div class="col-md-4">
+                        <h4><?php echo $title ?></br><small><?php echo $location ?></small></h4>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" onclick="parent.location='connectionFunctions.php?disconnect=<?php echo $currentUser->getObjectId()."-". $friend->getObjectId() ?>'" class="btn btn-inverse">Disconnect</button>
+                    </div>
+                </div>
+                <?php
             }
         }
-        echo "<br>END of CONNECTIONS<br><br>";
+        ?>
+
+                        </div>
+                </div>
+                
+            </div>
+        </div>  
+    </div>
+    <?php
+
+
 
     } catch (ParseException $ex) {
         echo $ex->getMessage().".<br>";
@@ -177,10 +286,11 @@ function displayConnections($currentUser){
 
 
 
-function destroyConnection($currentUser, $unfriendId){
+function destroyConnection($currentUserId, $unfriendId){
     try{
     $query = ParseUser::query();
     $unfriend = $query->equalTo("objectId", $unfriendId)->first();
+    $currentUser = $query->equalTo("objectId", $currentUserId)->first();
 
     //$unfriend = $query->first(); // only get first result
     //echo "Successfully retrieved " . count($unfriend) . " results.<br>";// debugging
@@ -199,19 +309,47 @@ function destroyConnection($currentUser, $unfriendId){
     }
 }
 
-function search($searchString){
-    echo "<br>SEARCH START <br>";
+if(isset($_GET["denyRequest"])) {
+    $id = $_GET["denyRequest"];
+    $query = new ParseQuery("connectionRequest");
     try{
-        $query = ParseUser::query();//exists("Profile")
-        $results = $query->ascending("name")->find();
-        echo count($results);
-        foreach($results as $user){
-            echo $user->getObjectId() . " - " . $user->get('name') . " - " . $user->getEmail(). "<br>";
-        }
+        $experience = $query->equalTo("objectId", $id )->first();
 
-    } catch (ParseException $ex) {
-        echo $ex->getMessage().".<br>";
+        if($experience){
+            $experience->destroy(true);
+        }
+    }catch (ParseException $ex) {
+            
     }
-    echo "SEARCH END <br>";
+    header("Location: view_connections.php");
+    exit;
+}
+
+if(isset($_GET["acceptRequest"])) {
+    $id = $_GET["acceptRequest"];
+    $query = new ParseQuery("connectionRequest");
+    try{
+        $experience = $query->equalTo("objectId", $id )->first();
+
+        if($experience){
+            acceptConnectionRequest($experience);
+        }
+    }catch (ParseException $ex) {
+            
+    }
+    header("Location: view_connections.php");
+    exit;
+}
+
+if(isset($_GET["disconnect"])) {
+    $disconnect = $_GET["disconnect"];
+    $pieces = explode("-", $disconnect);
+    echo $pieces[0]; // piece1
+    echo $pieces[1]; // piece2
+    
+    destroyConnection($pieces[0], $pieces[1]);
+
+    header("Location: view_connections.php");
+    exit;
 }
 ?>

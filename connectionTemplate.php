@@ -111,6 +111,16 @@ function createConnectionMain( $currentUser, $uid="" ){
     	
     	if($friend){
     		$friendName = $friend->get("name");
+    		$email = $friend->get("email");
+    		$profile = $friend->get("profile");
+
+    		$title = "";
+    		$location = "";
+    		if($profile){
+    			$profile->fetch();
+    			$title = $profile->get("currentTitle");
+    			$location = $profile->get("currentLocale").", ".$profile->get("currentState");
+    		}
     	?>
     	<div class="col-md-4"></div>
 		<div class="col-md-4">
@@ -126,11 +136,10 @@ function createConnectionMain( $currentUser, $uid="" ){
 						<?php echo $friendName ?>
 					</div>
 					<div class="profile-usertitle-job">
-						Software Engineer
+						<?php echo $email ?>
 					</div>
 					<div>
-						<h4><?php echo $friendName ?></br><small>Software Engineer</small></h4>
-						Bay Area, CA
+						<h4><?php echo $title ?></br><small><?php echo $location ?></small></h4>
 					</div>
 				</div>
 				<!-- END SIDEBAR USER TITLE -->

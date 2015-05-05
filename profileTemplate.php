@@ -217,7 +217,7 @@ function editProfileMain($currentUser){
 <div class="form-group">
   <label class="col-md-4 control-label" for="textarea">Summary</label>
   <div class="col-md-7">                     
-    <textarea class="form-control" id="textarea" name="summary" required><?php  //echo htmlentities($summary) ?></textarea>
+    <textarea class="form-control" id="textarea" name="summary" required><?php // echo $summary ?></textarea>
   </div>
 </div>
 

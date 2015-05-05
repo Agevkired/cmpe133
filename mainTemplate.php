@@ -38,9 +38,11 @@ function sideMenuAndStartMainDisplay( $name ){
 							My Profile </a>
 						</li>
 						<li>
-							<a href="home.php">
-							<i class="glyphicon glyphicon-home"></i>
-							Home </a>
+							<a href="premium_search_connections.php">
+							<i class="glyphicon glyphicon-search"></i>
+							Premium Search </a>
+							<!--<i class="glyphicon glyphicon-home"></i>
+							Home </a>-->
 						</li>
 						<li>
 							<a href="view_forum.php">
